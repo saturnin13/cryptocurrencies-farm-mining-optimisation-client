@@ -38,6 +38,7 @@ public class Ethereum extends Ethash {
 
     }
 
+    // TODO : add stratum
     @Override
     protected void startMiningMac() {
         // TODO: change the location to variables
