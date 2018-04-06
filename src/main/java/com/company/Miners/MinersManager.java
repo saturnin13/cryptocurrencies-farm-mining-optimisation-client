@@ -22,7 +22,7 @@ public class MinersManager {
 
         MinedCurrencyShortName currencyMined = MinedCurrencyShortName.valueOf(miningConfiguration.getCurrenciesToMine().get(0));
         // TODO: delete this next line
-        currencyMined = MinedCurrencyShortName.UBQ;
+        currencyMined = MinedCurrencyShortName.MUSIC;
         Miner mainMiner = MinersFactory.getMiner(currencyMined);
 
         mainMiner.startMining();

@@ -1,39 +1,51 @@
 package com.company.Miners;
 
+import java.util.List;
+
 public class JointMiner extends Miner {
 
     @Override
-    public void startMining() {
-
+    protected List<String> getMiningCommandsWindows() {
+        return null;
     }
 
     @Override
-    protected void startMiningWindows() {
-
+    protected List<String> getMiningCleanUpCommandsWindows() {
+        return null;
     }
 
     @Override
-    protected void startMiningLinux() {
-
+    protected List<String> getMiningCommandsLinux() {
+        return null;
     }
 
     @Override
-    protected void startMiningMac() {
-
+    protected List<String> getMiningCleanUpCommandsLinux() {
+        return null;
     }
 
     @Override
-    protected void installWindows() {
-
+    protected List<String> getMiningCommandsMac() {
+        return null;
     }
 
     @Override
-    protected void installLinux() {
-
+    protected List<String> getMiningCleanUpCommandsMac() {
+        return null;
     }
 
     @Override
-    protected void installMac() {
+    protected List<String> getInstallCommandsWindows() {
+        return null;
+    }
 
+    @Override
+    protected List<String> getInstallCommandsLinux() {
+        return null;
+    }
+
+    @Override
+    protected List<String> getInstallCommandsMac() {
+        return null;
     }
 }

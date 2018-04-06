@@ -3,59 +3,61 @@ package com.company.Miners.MiningAlgorithm.ASCIMining.SHA256Currencies;
 import com.company.Miners.MiningAlgorithm.ASCIMining.SHA256;
 import org.apache.log4j.Logger;
 
+import java.util.List;
+
 import static com.company.Miners.MinedCurrencyShortName.BTC;
 
 public class Bitcoin extends SHA256 {
 
     private final static Logger logger = Logger.getLogger(Bitcoin.class);
-    private static final Bitcoin instance = new Bitcoin();
 
-    private Bitcoin() {
+    public Bitcoin() {
         minedCurrencyShortName = BTC;
     }
 
-    public static Bitcoin getInstance(){
-        return instance;
+
+    @Override
+    protected List<String> getMiningCommandsWindows() {
+        return null;
     }
 
     @Override
-    public void startMining() {
-        logger.info("Bitcoin starting to mine");
-
+    protected List<String> getMiningCleanUpCommandsWindows() {
+        return null;
     }
 
     @Override
-    protected void startMiningWindows() {
-
+    protected List<String> getMiningCommandsLinux() {
+        return null;
     }
 
     @Override
-    protected void startMiningLinux() {
-
+    protected List<String> getMiningCleanUpCommandsLinux() {
+        return null;
     }
 
     @Override
-    protected void startMiningMac() {
-
+    protected List<String> getMiningCommandsMac() {
+        return null;
     }
 
     @Override
-    public boolean install() {
-        return false;
+    protected List<String> getMiningCleanUpCommandsMac() {
+        return null;
     }
 
     @Override
-    protected void installWindows() {
-
+    protected List<String> getInstallCommandsWindows() {
+        return null;
     }
 
     @Override
-    protected void installLinux() {
-
+    protected List<String> getInstallCommandsLinux() {
+        return null;
     }
 
     @Override
-    protected void installMac() {
-
+    protected List<String> getInstallCommandsMac() {
+        return null;
     }
 }

@@ -16,10 +16,14 @@ public class CommandExecutor {
     private final static Logger logger = Logger.getLogger(CommandExecutor.class);
 
     public static String executeCommands(List<String> commands, CommandExecutionEnvironment environment, boolean verbose) {
-        return executeCommands(commands, environment, verbose, -1);
+        return executeCommands(commands, null,environment, verbose, -1);
     }
 
-    public static String executeCommands(List<String> commands, CommandExecutionEnvironment environment, boolean verbose, long timeoutMillis) {
+    public static String executeCommands(List<String> commands, List<String> cleanUpCommands, CommandExecutionEnvironment environment, boolean verbose, long timeoutMillis) {
+        if(commands == null) {
+            return null;
+        }
+
         String delimiter;
         String shellUsed;
         String commandOption;
@@ -70,6 +74,10 @@ public class CommandExecutor {
             logger.error("IOException while executing a command");
             e.printStackTrace();
             System.exit(-1);
+        }
+
+        if(cleanUpCommands != null) {
+            executeCommands(cleanUpCommands, environment, false);
         }
 
         return output.toString();

@@ -2,11 +2,13 @@ package com.company.Miners;
 
 import com.company.CommandExecutor.CommandExecutor;
 import com.company.MachineInformation.Configuration.OSType;
+import com.company.Timeout.TimeoutManager;
 import com.google.common.collect.ImmutableList;
 import org.apache.log4j.Logger;
 
 import java.util.List;
 
+import static com.company.CommandExecutor.CommandExecutionEnvironment.BASH;
 import static com.company.CommandExecutor.CommandExecutionEnvironment.POWERSHELL;
 import static com.company.MachineInformation.Configuration.OSType.linux;
 import static com.company.MachineInformation.Configuration.OSType.mac;
@@ -34,15 +36,35 @@ public abstract class Miner {
         logger.info("Finish mining " + minedCurrencyShortName);
     }
 
-    protected abstract void startMiningWindows();
+    protected void startMiningWindows() {
+        CommandExecutor.executeCommands(getMiningCommandsWindows(), getMiningCleanUpCommandsWindows(), POWERSHELL, true, TimeoutManager.timeout(minedCurrencyShortName));
+    }
 
-    protected abstract void startMiningLinux();
+    protected abstract List<String> getMiningCommandsWindows();
+    protected abstract List<String> getMiningCleanUpCommandsWindows();
 
-    protected abstract void startMiningMac();
+    protected void startMiningLinux() {
+        // TODO: check that bash works on linux
+        CommandExecutor.executeCommands(getMiningCommandsLinux(), getMiningCleanUpCommandsLinux(), BASH, true, TimeoutManager.timeout(minedCurrencyShortName));
+    }
+
+    protected abstract List<String> getMiningCommandsLinux();
+    protected abstract List<String> getMiningCleanUpCommandsLinux();
+
+    protected void startMiningMac() {
+        CommandExecutor.executeCommands(getMiningCommandsMac(), getMiningCleanUpCommandsMac(), BASH, true, TimeoutManager.timeout(minedCurrencyShortName));
+    }
+
+    protected abstract List<String> getMiningCommandsMac();
+    protected abstract List<String> getMiningCleanUpCommandsMac();
 
     public boolean isInstalled() {
+        return existLocation(LOCATION_MAIN_FOLDER + "/" + minedCurrencyShortName + "/bin");
+    }
+
+    protected boolean existLocation(String location) {
         List<String> commands = new ImmutableList.Builder<String>()
-                .add("cd " + LOCATION_MAIN_FOLDER + "/" + minedCurrencyShortName + "/bin")
+                .add("cd " + location)
                 .build();
         String output = CommandExecutor.executeCommands(commands, POWERSHELL, false);
         return output.isEmpty();
@@ -64,9 +86,22 @@ public abstract class Miner {
         return true;
     }
 
-    protected abstract void installWindows();
+    protected void installWindows() {
+        CommandExecutor.executeCommands(getInstallCommandsWindows(), POWERSHELL, true);
+    }
 
-    protected abstract void installLinux();
+    protected abstract List<String> getInstallCommandsWindows();
 
-    protected abstract void installMac();
+    protected void installLinux() {
+        // TODO: check that bash works on linux
+        CommandExecutor.executeCommands(getInstallCommandsLinux(), BASH, true);
+    }
+
+    protected abstract List<String> getInstallCommandsLinux();
+
+    protected void installMac() {
+        CommandExecutor.executeCommands(getInstallCommandsMac(), BASH, true);
+    }
+
+    protected abstract List<String> getInstallCommandsMac();
 }
