@@ -1,14 +1,18 @@
 package com.company.Miners;
 
-import com.company.MachineInformation.Configuration.OS;
+import com.company.CommandExecutor.CommandExecutor;
 import com.company.MachineInformation.Configuration.OSType;
-import com.company.Miners.MiningAlgorithm.GpuMining.EthashCurrencies.Ethereum;
+import com.google.common.collect.ImmutableList;
 import org.apache.log4j.Logger;
 
+import java.util.List;
+
+import static com.company.CommandExecutor.CommandExecutionEnvironment.POWERSHELL;
 import static com.company.MachineInformation.Configuration.OSType.linux;
 import static com.company.MachineInformation.Configuration.OSType.mac;
 import static com.company.MachineInformation.Configuration.OSType.windows;
 import static com.company.MachineInformation.MachineConfigurationRetriever.getMachineCharacteristics;
+import static com.company.Variables.LOCATION_MAIN_FOLDER;
 
 public abstract class Miner {
 
@@ -27,6 +31,7 @@ public abstract class Miner {
         } else {
             logger.info("Could not determine the os type for starting to mine: " + minedCurrencyShortName);
         }
+        logger.info("Finish mining " + minedCurrencyShortName);
     }
 
     protected abstract void startMiningWindows();
@@ -34,6 +39,14 @@ public abstract class Miner {
     protected abstract void startMiningLinux();
 
     protected abstract void startMiningMac();
+
+    public boolean isInstalled() {
+        List<String> commands = new ImmutableList.Builder<String>()
+                .add("cd " + LOCATION_MAIN_FOLDER + "/" + minedCurrencyShortName + "/bin")
+                .build();
+        String output = CommandExecutor.executeCommands(commands, POWERSHELL, false);
+        return output.isEmpty();
+    }
 
     public boolean install() {
         logger.info("installing " + minedCurrencyShortName + " miner");
@@ -56,5 +69,4 @@ public abstract class Miner {
     protected abstract void installLinux();
 
     protected abstract void installMac();
-
 }

@@ -23,7 +23,7 @@ public class Main {
     }
 
     private static void startService() {
-        Integer clientUpdateRate = 3600000;
+        Integer clientUpdateRate = 3600;
         HttpRequestHandling httpRequestHandling = new HttpRequestHandling();
         MinersManager minersManager = new MinersManager();
 
@@ -31,18 +31,9 @@ public class Main {
             ClientConfiguration clientConfig = MachineConfigurationRetriever.getMachineCharacteristics();
             MiningConfiguration miningConfiguration = httpRequestHandling.getMiningConfiguration(clientConfig);
             minersManager.launchMiners(miningConfiguration);
-
-            sleep(clientUpdateRate);
         }
     }
 
-    private static void sleep(int clientUpdateRate) {
-        try {
-            TimeUnit.SECONDS.sleep(clientUpdateRate);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     private static boolean manageMiningSoftwares() {
         MiningSoftware miningSoftware = MiningSoftware.getInstance();

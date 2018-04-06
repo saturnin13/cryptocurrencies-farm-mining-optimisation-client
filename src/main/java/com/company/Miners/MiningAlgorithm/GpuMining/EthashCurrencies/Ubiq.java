@@ -2,32 +2,46 @@ package com.company.Miners.MiningAlgorithm.GpuMining.EthashCurrencies;
 
 import com.company.CommandExecutor.CommandExecutor;
 import com.company.Miners.MiningAlgorithm.GpuMining.Ethash;
+import com.company.Timeout.TimeoutManager;
 import com.google.common.collect.ImmutableList;
 import org.apache.log4j.Logger;
 
 import java.util.List;
 
 import static com.company.CommandExecutor.CommandExecutionEnvironment.POWERSHELL;
-import static com.company.Miners.MinedCurrencyShortName.ETH;
+import static com.company.Miners.MinedCurrencyShortName.UBQ;
 import static com.company.Variables.*;
 
-public class Ethereum extends Ethash {
+public class Ubiq extends Ethash {
 
-    private final static Logger logger = Logger.getLogger(Ethereum.class);
-    private static final Ethereum instance = new Ethereum();
+    private final static Logger logger = Logger.getLogger(Ubiq.class);
+    private static final Ubiq instance = new Ubiq();
 
     //TODO: add a stratum proxy option
-    private Ethereum() {
-        minedCurrencyShortName = ETH;
+    private Ubiq() {
+        minedCurrencyShortName = UBQ;
     }
 
-    public static Ethereum getInstance(){
+    public static Ubiq getInstance(){
         return instance;
     }
 
     @Override
     protected void startMiningWindows() {
-
+        // TODO: change the location to variables
+        // TODO: mine with -G for amd and -U for nvidia
+        // TODO: error "Insufficient CUDA driver: 8000" if driver nvidia not up to date
+        // TODO: DAG file too big for memory check
+        List<String> commands = new ImmutableList.Builder<String>()
+                .add("cd " + LOCATION_MAIN_FOLDER + "/" + minedCurrencyShortName + "/bin")
+                .add("setx GPU_FORCE_64BIT_PTR 0")
+                .add("setx GPU_MAX_HEAP_SIZE 100")
+                .add("setx GPU_USE_SYNC_OBJECTS 1")
+                .add("setx GPU_MAX_ALLOC_PERCENT 100")
+                .add("setx GPU_SINGLE_ALLOC_PERCENT 100") // all for 2gb mining
+                .add("./ethminer -U -F http://lb.geo.ubiqpool.org:8881/" + KEY_ETHEREUM + "/" + WORKER_NAME)
+                .build();
+        CommandExecutor.executeCommands(commands, POWERSHELL, true, TimeoutManager.timeout(minedCurrencyShortName));
     }
 
     @Override
@@ -35,26 +49,14 @@ public class Ethereum extends Ethash {
 
     }
 
-    // TODO : add stratum
     @Override
     protected void startMiningMac() {
-        // TODO: change the location to variables
-        // TODO: mine with -G for amd and -U for nvidia
-        List<String> commands = new ImmutableList.Builder<String>()
-            .add("cd " + LOCATION_MAIN_FOLDER + "/ethereum/bin")
-            .add("export GPU_FORCE_64BIT_PTR=0")
-            .add("export GPU_MAX_HEAP_SIZE=100")
-            .add("export GPU_USE_SYNC_OBJECTS=1")
-            .add("export GPU_MAX_ALLOC_PERCENT=100")
-            .add("export GPU_SINGLE_ALLOC_PERCENT=100")
-            .add("./ethminer -G -F http://eth-eu.dwarfpool.com:80/" + KEY_ETHEREUM + "/" + WORKER_NAME)
-            .build();
-        CommandExecutor.executeCommands(commands, POWERSHELL, true, MINING_TIMEOUT_MILLIS);
+
     }
 
     @Override
-    // TODO : check that the duplication of installation of the ethminer could not be removed
     protected void installWindows() {
+        // TODO: for some bug using an earlier version of ethminer fixes it
         List<String> commands = new ImmutableList.Builder<String>()
                 .add("cd ~/Downloads/")
                 .add("[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12") // by default TLS 1.0 is used, 1.2 is set
@@ -78,16 +80,6 @@ public class Ethereum extends Ethash {
 
     @Override
     protected void installMac() {
-        List<String> commands = new ImmutableList.Builder<String>()
-            .add("cd ~/Downloads/")
-            .add("curl -L -O https://github.com/ethereum-mining/ethminer/releases/download/v0.13.0rc6/ethminer-0.13.0rc6-Darwin.tar.gz")
-            .add("cd ~/")
-            .add("mkdir -p " + LOCATION_MAIN_FOLDER)
-            .add("cd mining-optimisation")
-            .add("mkdir -p "+ minedCurrencyShortName)
-            .add("cd " + minedCurrencyShortName + "")
-            .add("gunzip -c ~/Downloads/ethminer-0.13.0rc6-Darwin.tar.gz | tar xopf -")
-            .build();
-        CommandExecutor.executeCommands(commands, POWERSHELL, true);
+
     }
 }

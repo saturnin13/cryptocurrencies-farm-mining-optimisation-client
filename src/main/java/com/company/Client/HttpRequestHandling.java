@@ -16,13 +16,13 @@ import java.nio.charset.StandardCharsets;
 public class HttpRequestHandling {
 
     final static Logger logger = Logger.getLogger(URLConnection.class);
-    private final String requestAddress = "https://agile-spire-46056.herokuapp.com/";
+    private final String requestAddress = "https://crypto-mining-optimisation.herokuapp.com/";
 
     public MiningConfiguration getMiningConfiguration(ClientConfiguration clientConfiguration) {
         Gson g = new Gson();
         String jsonClientConfig = g.toJson(clientConfiguration);
         // TODO: remove hardcoding
-        jsonClientConfig = "{\"userId\":\"test\", \"data\":{\"sysconfig\":{\"OS\":\"linux\"}, \"benchMarking\":[]}}";
+        jsonClientConfig = "{\"userEmail\":\"saturnin.13@hotmail.fr\", \"data\":{\"sysconfig\":{\"OS\":\"linux\"}, \"benchMarking\":[]}}";
         String responce = postRequest(requestAddress, jsonClientConfig);
         return g.fromJson(responce, MiningConfiguration.class);
     }
