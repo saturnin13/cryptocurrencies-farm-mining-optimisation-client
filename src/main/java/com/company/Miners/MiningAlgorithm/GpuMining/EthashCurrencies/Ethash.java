@@ -55,7 +55,7 @@ public abstract class Ethash extends Miner {
                 .add("export GPU_USE_SYNC_OBJECTS=1")
                 .add("export GPU_MAX_ALLOC_PERCENT=100")
                 .add("export GPU_SINGLE_ALLOC_PERCENT=100")
-                .add("./ethminer -G -F " + poolAddress + "/" + KEY_ETHEREUM + "/" + WORKER_NAME)
+                .add("./ethminer --farm-recheck 200 -G -F " + poolAddress + "/" + KEY_ETHEREUM + "/" + WORKER_NAME)
                 .build();
     }
 
