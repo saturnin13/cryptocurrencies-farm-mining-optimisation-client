@@ -23,8 +23,8 @@ public class HttpRequestHandling {
         String jsonClientConfig = g.toJson(clientConfiguration);
         // TODO: remove hardcoding
         jsonClientConfig = "{\"userEmail\":\"saturnin.13@hotmail.fr\", \"data\":{\"sysconfig\":{\"OS\":\"linux\"}, \"benchMarking\":[]}}";
-        String responce = postRequest(requestAddress, jsonClientConfig);
-        return g.fromJson(responce, MiningConfiguration.class);
+        String response = postRequest(requestAddress, jsonClientConfig);
+        return g.fromJson(response, MiningConfiguration.class);
     }
 
 

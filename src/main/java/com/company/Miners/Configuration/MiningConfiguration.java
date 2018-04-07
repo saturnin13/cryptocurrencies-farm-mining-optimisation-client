@@ -6,7 +6,6 @@ import java.util.List;
 
 @Data
 public class MiningConfiguration {
-
     boolean activateMining;
     List<String> currenciesToMine;
 }
