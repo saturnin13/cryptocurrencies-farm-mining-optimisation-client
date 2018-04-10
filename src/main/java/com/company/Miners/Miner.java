@@ -19,6 +19,7 @@ public abstract class Miner {
 
     private final static Logger logger = Logger.getLogger(Miner.class);
     protected MinedCurrencyShortName minedCurrencyShortName;
+    protected String poolAddress;
 
     public void startMining() {
         logger.info("Starting to mine " + minedCurrencyShortName + " miner");
@@ -61,7 +62,7 @@ public abstract class Miner {
     protected abstract List<String> getMiningCleanUpCommandsMac();
 
     public boolean isInstalled() {
-        return existLocation(LOCATION_MAIN_FOLDER + "/" + minedCurrencyShortName + "/bin");
+        return existLocation(LOCATION_MAIN_FOLDER + "/" + minedCurrencyShortName);
     }
 
     protected abstract CommandOutputMonitor getOutputMonitoring();
@@ -87,6 +88,7 @@ public abstract class Miner {
             logger.info("Could not determine the os type for installation: " + minedCurrencyShortName);
             return false;
         }
+        logger.info("Installetion completed successfully for " + minedCurrencyShortName + " miner");
         return true;
     }
 

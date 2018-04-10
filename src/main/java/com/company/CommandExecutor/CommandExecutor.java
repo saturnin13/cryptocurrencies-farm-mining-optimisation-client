@@ -50,6 +50,7 @@ public class CommandExecutor {
         logger.trace("executing command " + commandsString + " in environment " + environment);
 
         String line;
+        String previousLine = null;
         StringBuilder output = new StringBuilder();
         long startingTimeMillis = System.currentTimeMillis();
 
@@ -68,11 +69,12 @@ public class CommandExecutor {
                     logger.debug(line);
                 }
                 if(outputMonitor != null) {
-                    outputMonitor.monitorOutput(line);
+                    outputMonitor.monitorOutput(line, previousLine);
                 }
                 if(System.currentTimeMillis() > startingTimeMillis + timeoutMillis && timeoutMillis != -1) {
                     break;
                 }
+                previousLine = line;
             }
 
             p.getOutputStream().close();

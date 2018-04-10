@@ -1,6 +1,7 @@
 package com.company.Miners;
 
 import com.company.Miners.MiningAlgorithm.ASCIMining.SHA256Currencies.Bitcoin;
+import com.company.Miners.MiningAlgorithm.GpuMining.CryptoNightV7Currencies.Monero;
 import com.company.Miners.MiningAlgorithm.GpuMining.EthashCurrencies.*;
 import org.apache.log4j.Logger;
 
@@ -14,14 +15,15 @@ public class MinersFactory {
             return new Ethereum();
         }
 
-        switch (currencyShortName.toString()) {
-            case "ETH"  : return new Ethereum();
-            case "ETC"  : return new EthereumClassic();
-            case "BTC"  : return new Bitcoin();
-            case "EXP"  : return new Expanse();
-            case "MUSIC": return new MusicCoin();
-            case "PIRL" : return new Pirl();
-            case "UBQ"  : return new Ubiq();
+        switch (currencyShortName) {
+            case ETH  : return new Ethereum();
+            case ETC  : return new EthereumClassic();
+            case BTC  : return new Bitcoin();
+            case EXP  : return new Expanse();
+            case MUSIC: return new MusicCoin();
+            case PIRL : return new Pirl();
+            case UBQ  : return new Ubiq();
+            case XMR  : return new Monero();
             default: logger.error("Could not find the miner object: " + currencyShortName + ", defaulting to ethereum miner");
             return new Ethereum();
         }

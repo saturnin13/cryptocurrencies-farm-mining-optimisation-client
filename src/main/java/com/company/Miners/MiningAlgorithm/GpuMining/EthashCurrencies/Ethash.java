@@ -10,7 +10,6 @@ import static com.company.Variables.*;
 
 // Mining Ethhash is done using ethminer, claymore and stratum can be used as well
 public abstract class Ethash extends Miner {
-    protected String poolAddress;
 
     @Override
     protected List<String> getMiningCommandsWindows() {
