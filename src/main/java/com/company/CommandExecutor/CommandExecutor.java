@@ -1,5 +1,6 @@
 package com.company.CommandExecutor;
 
+import com.company.CommandExecutor.CommandOutputMonitoring.CommandOutputMonitor;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -16,10 +17,15 @@ public class CommandExecutor {
     private final static Logger logger = Logger.getLogger(CommandExecutor.class);
 
     public static String executeCommands(List<String> commands, CommandExecutionEnvironment environment, boolean verbose) {
-        return executeCommands(commands, null,environment, verbose, -1);
+        return executeCommands(commands, null, environment, null, verbose, -1);
     }
 
-    public static String executeCommands(List<String> commands, List<String> cleanUpCommands, CommandExecutionEnvironment environment, boolean verbose, long timeoutMillis) {
+    public static String executeCommands(List<String> commands,  List<String> cleanUpCommands, CommandExecutionEnvironment environment, boolean verbose) {
+        return executeCommands(commands, cleanUpCommands, environment, null, verbose, -1);
+    }
+
+
+    public static String executeCommands(List<String> commands, List<String> cleanUpCommands, CommandExecutionEnvironment environment, CommandOutputMonitor outputMonitor, boolean verbose, long timeoutMillis) {
         if(commands == null) {
             return null;
         }
@@ -59,7 +65,10 @@ public class CommandExecutor {
             while ((line = stdInput.readLine()) != null) {
                 output.append(line).append("\n");
                 if(verbose) {
-                    logger.debug("stdInput of command currently executed : " + line);
+                    logger.debug(line);
+                }
+                if(outputMonitor != null) {
+                    outputMonitor.monitorOutput(line);
                 }
                 if(System.currentTimeMillis() > startingTimeMillis + timeoutMillis && timeoutMillis != -1) {
                     break;

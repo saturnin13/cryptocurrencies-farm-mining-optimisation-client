@@ -1,6 +1,7 @@
 package com.company.Miners;
 
 import com.company.CommandExecutor.CommandExecutor;
+import com.company.CommandExecutor.CommandOutputMonitoring.CommandOutputMonitor;
 import com.company.MachineInformation.Configuration.OSType;
 import com.company.Timeout.TimeoutManager;
 import com.google.common.collect.ImmutableList;
@@ -10,9 +11,7 @@ import java.util.List;
 
 import static com.company.CommandExecutor.CommandExecutionEnvironment.BASH;
 import static com.company.CommandExecutor.CommandExecutionEnvironment.POWERSHELL;
-import static com.company.MachineInformation.Configuration.OSType.linux;
-import static com.company.MachineInformation.Configuration.OSType.mac;
-import static com.company.MachineInformation.Configuration.OSType.windows;
+import static com.company.MachineInformation.Configuration.OSType.*;
 import static com.company.MachineInformation.MachineConfigurationRetriever.getMachineCharacteristics;
 import static com.company.Variables.LOCATION_MAIN_FOLDER;
 
@@ -37,7 +36,8 @@ public abstract class Miner {
     }
 
     protected void startMiningWindows() {
-        CommandExecutor.executeCommands(getMiningCommandsWindows(), getMiningCleanUpCommandsWindows(), POWERSHELL, true, TimeoutManager.timeout(minedCurrencyShortName));
+        CommandExecutor.executeCommands(getMiningCommandsWindows(), getMiningCleanUpCommandsWindows(), POWERSHELL, getOutputMonitoring(),
+                true, TimeoutManager.timeout(minedCurrencyShortName));
     }
 
     protected abstract List<String> getMiningCommandsWindows();
@@ -45,14 +45,16 @@ public abstract class Miner {
 
     protected void startMiningLinux() {
         // TODO: check that bash works on linux
-        CommandExecutor.executeCommands(getMiningCommandsLinux(), getMiningCleanUpCommandsLinux(), BASH, true, TimeoutManager.timeout(minedCurrencyShortName));
+        CommandExecutor.executeCommands(getMiningCommandsLinux(), getMiningCleanUpCommandsLinux(), BASH, getOutputMonitoring(),
+                true, TimeoutManager.timeout(minedCurrencyShortName));
     }
 
     protected abstract List<String> getMiningCommandsLinux();
     protected abstract List<String> getMiningCleanUpCommandsLinux();
 
     protected void startMiningMac() {
-        CommandExecutor.executeCommands(getMiningCommandsMac(), getMiningCleanUpCommandsMac(), BASH, true, TimeoutManager.timeout(minedCurrencyShortName));
+        CommandExecutor.executeCommands(getMiningCommandsMac(), getMiningCleanUpCommandsMac(), BASH, getOutputMonitoring(),
+                true, TimeoutManager.timeout(minedCurrencyShortName));
     }
 
     protected abstract List<String> getMiningCommandsMac();
@@ -61,6 +63,8 @@ public abstract class Miner {
     public boolean isInstalled() {
         return existLocation(LOCATION_MAIN_FOLDER + "/" + minedCurrencyShortName + "/bin");
     }
+
+    protected abstract CommandOutputMonitor getOutputMonitoring();
 
     protected boolean existLocation(String location) {
         List<String> commands = new ImmutableList.Builder<String>()

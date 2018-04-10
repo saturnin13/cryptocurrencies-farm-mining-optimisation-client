@@ -1,5 +1,6 @@
 package com.company.Miners.MiningAlgorithm.GpuMining.EthashCurrencies;
 
+import com.company.CommandExecutor.CommandOutputMonitoring.CommandOutputMonitor;
 import com.company.Miners.Miner;
 import com.google.common.collect.ImmutableList;
 
@@ -20,7 +21,7 @@ public abstract class Ethash extends Miner {
                 .add("setx GPU_USE_SYNC_OBJECTS 1")
                 .add("setx GPU_MAX_ALLOC_PERCENT 100")
                 .add("setx GPU_SINGLE_ALLOC_PERCENT 100") // all for 2gb mining
-                .add("./ethminer -U -F " + poolAddress + "/" + KEY_ETHEREUM + "/" + WORKER_NAME)
+                .add("./ethminer --farm-recheck 200 -U -F " + poolAddress + "/" + KEY_ETHEREUM + "/" + WORKER_NAME)
                 .build();
     }
 
@@ -57,6 +58,11 @@ public abstract class Ethash extends Miner {
                 .add("export GPU_SINGLE_ALLOC_PERCENT=100")
                 .add("./ethminer --farm-recheck 200 -G -F " + poolAddress + "/" + KEY_ETHEREUM + "/" + WORKER_NAME)
                 .build();
+    }
+
+    @Override
+    protected CommandOutputMonitor getOutputMonitoring() {
+        return new EthMinerOutputMonitor(minedCurrencyShortName);
     }
 
     @Override

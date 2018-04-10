@@ -22,7 +22,7 @@ public class MinersFactory {
             case "MUSIC": return new MusicCoin();
             case "PIRL" : return new Pirl();
             case "UBQ"  : return new Ubiq();
-            default: logger.error("Could not find the miner:" + currencyShortName + ", defaulting to ethereum miner");
+            default: logger.error("Could not find the miner object: " + currencyShortName + ", defaulting to ethereum miner");
             return new Ethereum();
         }
     }

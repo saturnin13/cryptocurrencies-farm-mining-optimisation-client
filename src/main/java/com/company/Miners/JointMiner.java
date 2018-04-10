@@ -1,5 +1,7 @@
 package com.company.Miners;
 
+import com.company.CommandExecutor.CommandOutputMonitoring.CommandOutputMonitor;
+
 import java.util.List;
 
 public class JointMiner extends Miner {
@@ -31,6 +33,11 @@ public class JointMiner extends Miner {
 
     @Override
     protected List<String> getMiningCleanUpCommandsMac() {
+        return null;
+    }
+
+    @Override
+    protected CommandOutputMonitor getOutputMonitoring() {
         return null;
     }
 

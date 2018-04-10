@@ -2,6 +2,7 @@ package com.company.Client;
 
 import com.company.MachineInformation.Configuration.ClientConfiguration;
 import com.company.Miners.Configuration.MiningConfiguration;
+import com.company.Miners.MinedCurrencyShortName;
 import com.google.gson.Gson;
 import org.apache.log4j.Logger;
 
@@ -13,32 +14,47 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 
+import static com.company.Variables.POST_REQUEST_TIMEOUT;
+
 public class HttpRequestHandling {
 
     final static Logger logger = Logger.getLogger(URLConnection.class);
     private final String requestAddress = "https://crypto-mining-optimisation.herokuapp.com/";
 
     public MiningConfiguration getMiningConfiguration(ClientConfiguration clientConfiguration) {
+        logger.info("Getting mining configurations");
+
         Gson g = new Gson();
         String jsonClientConfig = g.toJson(clientConfiguration);
         // TODO: remove hardcoding
         jsonClientConfig = "{\"userEmail\":\"saturnin.13@hotmail.fr\", \"data\":{\"sysconfig\":{\"OS\":\"linux\"}, \"benchMarking\":[]}}";
-        String response = postRequest(requestAddress, jsonClientConfig);
+        String response = postRequest(requestAddress, jsonClientConfig, "POST");
         return g.fromJson(response, MiningConfiguration.class);
+    }
+
+    // TODO: set recuring work on the server to delete the workers records in the database which are no longer valid (give them a timestamp)
+    public void reportMiningDiagnosis(MinedCurrencyShortName currency, float hashRate) {
+        logger.info("Sending a report of mining diagnosis: " + currency + ", " + hashRate);
+
+        String request = "{\"userEmail\":\"saturnin.13@hotmail.fr\", \"workerName\": \"workerPCsaturnin\",\"currency\":\"" + currency + "\", \"hashrate\":\"" + hashRate + "\"}";
+        postRequest(requestAddress, request, "PUT");
     }
 
 
     //TODO: remove hardcoded data
-    private String postRequest(String urlToRead, String data) {
+    private String postRequest(String urlToRead, String data, String requestMethod) {
+        logger.info("Sending a post request for the following url " + urlToRead + " with the following data " + data);
         try{
             StringBuilder result = new StringBuilder();
             URL url = new URL(urlToRead);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             byte[] postData = data.getBytes(StandardCharsets.US_ASCII);
 
-            conn.setRequestMethod("POST");
+            conn.setRequestMethod(requestMethod);
             conn.addRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
             conn.addRequestProperty("Accept", "*/*");
+            conn.setConnectTimeout(POST_REQUEST_TIMEOUT / 2); // TODO : manage when a timeout happens
+            conn.setReadTimeout(POST_REQUEST_TIMEOUT / 2);
 
             conn.setDoOutput(true);
             try(DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
@@ -52,7 +68,7 @@ public class HttpRequestHandling {
             }
             rd.close();
 
-            logger.info("Sending a post request for the following url " + urlToRead + " with the following data " + data + " with a response of " + result);
+            logger.info("Post request got the following response " + result);
             return result.toString();
         } catch (Exception e) {
             e.printStackTrace();

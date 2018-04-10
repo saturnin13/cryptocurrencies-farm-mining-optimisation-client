@@ -12,4 +12,5 @@ public class Ubiq extends Ethash {
         minedCurrencyShortName = UBQ;
         poolAddress = "http://lb.geo.ubiqpool.org:8881";
     }
+
 }
