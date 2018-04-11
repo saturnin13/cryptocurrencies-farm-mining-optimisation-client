@@ -1,6 +1,6 @@
 package com.company.Miners.MiningAlgorithm.GpuMining.CryptoNightV7Currencies;
 
-import com.company.CommandExecutor.CommandOutputMonitoring.CommandOutputMonitor;
+import com.company.CommandsExecutor.CommandOutputMonitoring.CommandOutputMonitor;
 import com.company.Miners.Miner;
 import com.google.common.collect.ImmutableList;
 

@@ -1,6 +1,7 @@
-package com.company.CommandExecutor;
+package com.company.CommandsExecutor;
 
-import com.company.CommandExecutor.CommandOutputMonitoring.CommandOutputMonitor;
+import com.company.CommandsExecutor.CommandOutputMonitoring.CommandOutputMonitor;
+import lombok.Builder;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -9,23 +10,27 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.company.CommandExecutor.CommandExecutionEnvironment.POWERSHELL;
-import static com.company.CommandExecutor.CommandExecutionEnvironment.BASH;
+import static com.company.CommandsExecutor.CommandExecutionEnvironment.BASH;
+import static com.company.CommandsExecutor.CommandExecutionEnvironment.POWERSHELL;
 
-public class CommandExecutor {
+@Builder
+public class CommandExecutor extends Thread {
+
+    private volatile boolean exit = false;
 
     private final static Logger logger = Logger.getLogger(CommandExecutor.class);
+    private List<String> commands;
+    private List<String> cleanUpCommands;
+    private CommandExecutionEnvironment environment;
+    private CommandOutputMonitor outputMonitor;
+    private boolean verbose;
 
-    public static String executeCommands(List<String> commands, CommandExecutionEnvironment environment, boolean verbose) {
-        return executeCommands(commands, null, environment, null, verbose, -1);
+    @Override
+    public void run() {
+        runAndReturn();
     }
 
-    public static String executeCommands(List<String> commands,  List<String> cleanUpCommands, CommandExecutionEnvironment environment, boolean verbose) {
-        return executeCommands(commands, cleanUpCommands, environment, null, verbose, -1);
-    }
-
-
-    public static String executeCommands(List<String> commands, List<String> cleanUpCommands, CommandExecutionEnvironment environment, CommandOutputMonitor outputMonitor, boolean verbose, long timeoutMillis) {
+    public String runAndReturn() {
         if(commands == null) {
             return null;
         }
@@ -71,7 +76,7 @@ public class CommandExecutor {
                 if(outputMonitor != null) {
                     outputMonitor.monitorOutput(line, previousLine);
                 }
-                if(System.currentTimeMillis() > startingTimeMillis + timeoutMillis && timeoutMillis != -1) {
+                if(exit) {
                     break;
                 }
                 previousLine = line;
@@ -88,10 +93,16 @@ public class CommandExecutor {
         }
 
         if(cleanUpCommands != null) {
-            executeCommands(cleanUpCommands, environment, false);
+            this.commands = cleanUpCommands;
+            this.cleanUpCommands = null;
+            this.verbose = false;
+            run();
         }
-
         return output.toString();
+    }
+
+    public void exit() {
+        exit = true;
     }
 
     private static String getBashhellUsed() {

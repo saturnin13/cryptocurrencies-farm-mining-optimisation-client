@@ -1,13 +1,12 @@
 package com.company.Miners.MiningAlgorithm.ASCIMining.SHA256Currencies;
 
-import com.company.CommandExecutor.CommandOutputMonitoring.CommandOutputMonitor;
+import com.company.CommandsExecutor.CommandOutputMonitoring.CommandOutputMonitor;
 import com.company.Miners.MiningAlgorithm.ASCIMining.SHA256;
 import org.apache.log4j.Logger;
 
 import java.util.List;
 
 import static com.company.Miners.MinedCurrencyShortName.BTC;
-import static com.company.Variables.LOCATION_MAIN_FOLDER;
 
 public class Bitcoin extends SHA256 {
 

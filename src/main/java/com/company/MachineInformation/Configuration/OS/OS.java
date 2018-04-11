@@ -1,7 +1,6 @@
-package com.company.MachineInformation.Configuration;
+package com.company.MachineInformation.Configuration.OS;
 
 import com.company.Main;
-import lombok.Builder;
 import lombok.Data;
 import org.apache.log4j.Logger;
 

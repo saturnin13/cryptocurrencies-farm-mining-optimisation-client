@@ -1,6 +1,6 @@
 package com.company.Miners;
 
-import com.company.CommandExecutor.CommandOutputMonitoring.CommandOutputMonitor;
+import com.company.CommandsExecutor.CommandOutputMonitoring.CommandOutputMonitor;
 
 import java.util.List;
 

@@ -23,15 +23,8 @@ public class Main {
     }
 
     private static void startService() {
-        Integer clientUpdateRate = 3600;
-        HttpRequestHandling httpRequestHandling = new HttpRequestHandling();
         MinersManager minersManager = new MinersManager();
-
-        while(true) {
-            ClientConfiguration clientConfig = MachineConfigurationRetriever.getMachineCharacteristics();
-            MiningConfiguration miningConfiguration = httpRequestHandling.getMiningConfiguration(clientConfig);
-            minersManager.launchMiners(miningConfiguration);
-        }
+        minersManager.launchMiners();
     }
 
 

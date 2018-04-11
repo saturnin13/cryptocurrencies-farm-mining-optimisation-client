@@ -1,4 +1,4 @@
-package com.company.CommandExecutor.CommandOutputMonitoring;
+package com.company.CommandsExecutor.CommandOutputMonitoring;
 
 import com.company.Client.HttpRequestHandling;
 import com.company.Miners.MinedCurrencyShortName;
@@ -6,7 +6,7 @@ import com.company.Miners.MinedCurrencyShortName;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.company.Variables.HASHRATE_UPDATING_RATE;
+import static com.company.Variables.HASHRATE_REPORTING_RATE;
 
 public abstract class MiningCommandOutputMonitor implements CommandOutputMonitor {
     protected long lastUpdateTime;
@@ -20,7 +20,7 @@ public abstract class MiningCommandOutputMonitor implements CommandOutputMonitor
 
     @Override
     public void monitorOutput(String line, String previousLine) {
-        if (System.currentTimeMillis() - lastUpdateTime < HASHRATE_UPDATING_RATE) {
+        if (System.currentTimeMillis() - lastUpdateTime < HASHRATE_REPORTING_RATE) {
             return;
         }
         Float hashrate = getHashrate(line) != null ? getHashrate(line): getHashrate(previousLine);

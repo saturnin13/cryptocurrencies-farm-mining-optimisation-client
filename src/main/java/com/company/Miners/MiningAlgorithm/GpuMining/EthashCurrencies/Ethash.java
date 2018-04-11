@@ -1,9 +1,11 @@
 package com.company.Miners.MiningAlgorithm.GpuMining.EthashCurrencies;
 
-import com.company.CommandExecutor.CommandOutputMonitoring.CommandOutputMonitor;
+import com.company.CommandsExecutor.CommandOutputMonitoring.CommandOutputMonitor;
 import com.company.Miners.Miner;
 import com.google.common.collect.ImmutableList;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import static com.company.Variables.*;
@@ -111,6 +113,6 @@ public abstract class Ethash extends Miner {
 
     @Override
     public boolean isInstalled() {
-        return existLocation(LOCATION_MAIN_FOLDER + "/Ethash/bin");
+        return Files.isDirectory(Paths.get(LOCATION_MAIN_FOLDER + "/Ethash"));
     }
 }

@@ -9,6 +9,15 @@ public class MinersFactory {
 
     private final static Logger logger = Logger.getLogger(MinersFactory.class);
 
+    private static Miner ethereum = new Ethereum();
+    private static Miner ethereumClassic = new EthereumClassic();
+    private static Miner bitcoin = new Bitcoin();
+    private static Miner expanse = new Expanse();
+    private static Miner musicCoin = new MusicCoin();
+    private static Miner pirl = new Pirl();
+    private static Miner ubiq = new Ubiq();
+    private static Miner monero = new Monero();
+
     public static Miner getMiner(MinedCurrencyShortName currencyShortName) {
         if (currencyShortName == null) {
             logger.warn("Empty request content defaulting to Ethereum");
@@ -16,14 +25,14 @@ public class MinersFactory {
         }
 
         switch (currencyShortName) {
-            case ETH  : return new Ethereum();
-            case ETC  : return new EthereumClassic();
-            case BTC  : return new Bitcoin();
-            case EXP  : return new Expanse();
-            case MUSIC: return new MusicCoin();
-            case PIRL : return new Pirl();
-            case UBQ  : return new Ubiq();
-            case XMR  : return new Monero();
+            case ETH  : return ethereum;
+            case ETC  : return ethereumClassic;
+            case BTC  : return bitcoin;
+            case EXP  : return expanse;
+            case MUSIC: return musicCoin;
+            case PIRL : return pirl;
+            case UBQ  : return ubiq;
+            case XMR  : return monero;
             default: logger.error("Could not find the miner object: " + currencyShortName + ", defaulting to ethereum miner");
             return new Ethereum();
         }
