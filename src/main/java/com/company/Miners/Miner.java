@@ -45,7 +45,6 @@ public abstract class Miner {
         return CommandExecutor.builder()
                 .commands(getMiningCommandsWindows())
                 .cleanUpCommands(getMiningCleanUpCommandsWindows())
-                .environment(POWERSHELL)
                 .outputMonitor(getOutputMonitoring())
                 .verbose(true)
                 .build();
@@ -59,7 +58,6 @@ public abstract class Miner {
         return CommandExecutor.builder()
                 .commands(getMiningCommandsLinux())
                 .cleanUpCommands(getMiningCleanUpCommandsLinux())
-                .environment(BASH)
                 .outputMonitor(getOutputMonitoring())
                 .verbose(true)
                 .build();
@@ -72,7 +70,6 @@ public abstract class Miner {
         return CommandExecutor.builder()
                 .commands(getMiningCommandsMac())
                 .cleanUpCommands(getMiningCleanUpCommandsMac())
-                .environment(BASH)
                 .outputMonitor(getOutputMonitoring())
                 .verbose(true)
                 .build();
@@ -107,7 +104,6 @@ public abstract class Miner {
     private void installWindows() {
         CommandExecutor commandExecutor = CommandExecutor.builder()
                 .commands(getInstallCommandsWindows())
-                .environment(POWERSHELL)
                 .verbose(true)
                 .build();
         commandExecutor.run();
@@ -119,7 +115,6 @@ public abstract class Miner {
         // TODO: check that bash works on linux
         CommandExecutor commandExecutor = CommandExecutor.builder()
                 .commands(getInstallCommandsLinux())
-                .environment(BASH)
                 .verbose(true)
                 .build();
         commandExecutor.run();
@@ -130,7 +125,6 @@ public abstract class Miner {
     private void installMac() {
         CommandExecutor commandExecutor = CommandExecutor.builder()
                 .commands(getInstallCommandsMac())
-                .environment(BASH)
                 .verbose(true)
                 .build();
         commandExecutor.run();

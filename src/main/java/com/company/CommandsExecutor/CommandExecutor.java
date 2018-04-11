@@ -1,6 +1,8 @@
 package com.company.CommandsExecutor;
 
 import com.company.CommandsExecutor.CommandOutputMonitoring.CommandOutputMonitor;
+import com.company.MachineInformation.Configuration.OS.OS;
+import com.company.MachineInformation.MachineConfigurationRetriever;
 import lombok.Builder;
 import org.apache.log4j.Logger;
 
@@ -21,7 +23,6 @@ public class CommandExecutor extends Thread {
     private final static Logger logger = Logger.getLogger(CommandExecutor.class);
     private List<String> commands;
     private List<String> cleanUpCommands;
-    private CommandExecutionEnvironment environment;
     private CommandOutputMonitor outputMonitor;
     private boolean verbose;
 
@@ -38,6 +39,9 @@ public class CommandExecutor extends Thread {
         String delimiter;
         String shellUsed;
         String commandOption;
+        // Exceptionally OS class is accessed directly instead of the MachineConfigurationRetriever class to avoid mutual dependencies and stack overflow
+        OS os = new OS();
+        CommandExecutionEnvironment environment = os.getEnvironment();
         if(environment == POWERSHELL) {
             delimiter = ";";
             shellUsed = "C:/Windows/system32/WindowsPowerShell/v1.0/powershell.exe";
