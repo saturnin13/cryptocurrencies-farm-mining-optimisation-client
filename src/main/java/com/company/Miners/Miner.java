@@ -88,7 +88,7 @@ public abstract class Miner {
             logger.info("Could not determine the os type for installation: " + minedCurrencyShortName);
             return false;
         }
-        logger.info("Installetion completed successfully for " + minedCurrencyShortName + " miner");
+        logger.info("Installation completed successfully for " + minedCurrencyShortName + " miner");
         return true;
     }
 

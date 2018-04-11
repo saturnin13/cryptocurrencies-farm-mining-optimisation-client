@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import java.util.List;
 
 import static com.company.Miners.MinedCurrencyShortName.BTC;
+import static com.company.Variables.LOCATION_MAIN_FOLDER;
 
 public class Bitcoin extends SHA256 {
 
@@ -15,7 +16,6 @@ public class Bitcoin extends SHA256 {
     public Bitcoin() {
         minedCurrencyShortName = BTC;
     }
-
 
     @Override
     protected List<String> getMiningCommandsWindows() {
@@ -51,6 +51,11 @@ public class Bitcoin extends SHA256 {
     protected CommandOutputMonitor getOutputMonitoring() {
         return null;
     }
+    @Override
+    public boolean isInstalled() {
+        return true;
+    }
+
 
     @Override
     protected List<String> getInstallCommandsWindows() {

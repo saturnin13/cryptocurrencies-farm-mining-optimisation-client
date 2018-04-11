@@ -9,9 +9,7 @@ import org.apache.log4j.Logger;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 
 import static com.company.Variables.POST_REQUEST_TIMEOUT;
@@ -29,21 +27,20 @@ public class HttpRequestHandling {
         // TODO: remove hardcoding
         jsonClientConfig = "{\"userEmail\":\"saturnin.13@hotmail.fr\", \"data\":{\"sysconfig\":{\"OS\":\"linux\"}, \"benchMarking\":[]}}";
         String response = postRequest(requestAddress, jsonClientConfig, "POST");
+        logger.info("Obtained the following mining configuration: " + response);
         return g.fromJson(response, MiningConfiguration.class);
     }
 
-    // TODO: set recuring work on the server to delete the workers records in the database which are no longer valid (give them a timestamp)
+    // TODO: set recurring work on the server to delete the workers records in the database which are no longer valid (give them a timestamp)
     public void reportMiningDiagnosis(MinedCurrencyShortName currency, float hashRate) {
-        logger.info("Sending a report of mining diagnosis: " + currency + ", " + hashRate);
-
-        String request = "{\"userEmail\":\"saturnin.13@hotmail.fr\", \"workerName\": \"workerPCsaturnin\",\"currency\":\"" + currency + "\", \"hashrate\":\"" + hashRate + "\"}";
+        logger.info("Sending a report of mining diagnosis with currency " + currency + " and hashrate of " + hashRate + " H/s");
+        String request = "{\"userEmail\":\"saturnin.13@hotmail.fr\", \"workerName\": \"" + getWorkerName() + "\",\"currency\":\"" + currency + "\", \"hashrate\":\"" + hashRate + "\"}";
         postRequest(requestAddress, request, "PUT");
     }
 
-
     //TODO: remove hardcoded data
     private String postRequest(String urlToRead, String data, String requestMethod) {
-        logger.info("Sending a post request for the following url " + urlToRead + " with the following data " + data);
+        logger.trace("Sending a post request for the following url " + urlToRead + " with the following data " + data);
         try{
             StringBuilder result = new StringBuilder();
             URL url = new URL(urlToRead);
@@ -68,12 +65,23 @@ public class HttpRequestHandling {
             }
             rd.close();
 
-            logger.info("Post request got the following response " + result);
+            logger.trace("Post request got the following response: " + result);
             return result.toString();
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("Get request failed to the following url " + urlToRead);
             return "";
         }
+    }
+
+    private String getWorkerName() {
+        String name = null;
+        try {
+            name = InetAddress.getLocalHost().getHostName() == null ? InetAddress.getLocalHost().getHostAddress(): InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        return name;
     }
 }

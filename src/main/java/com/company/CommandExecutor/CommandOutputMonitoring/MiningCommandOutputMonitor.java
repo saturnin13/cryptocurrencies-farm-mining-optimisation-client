@@ -24,10 +24,9 @@ public abstract class MiningCommandOutputMonitor implements CommandOutputMonitor
             return;
         }
         Float hashrate = getHashrate(line) != null ? getHashrate(line): getHashrate(previousLine);
-        if(hashrate != null) {
-            HttpRequestHandling httpRequestHandling = new HttpRequestHandling();
-            httpRequestHandling.reportMiningDiagnosis(currencyShortName, hashrate);
-        }
+        hashrate = hashrate == null ? 0: hashrate;
+        HttpRequestHandling httpRequestHandling = new HttpRequestHandling();
+        httpRequestHandling.reportMiningDiagnosis(currencyShortName, hashrate);
         lastUpdateTime = System.currentTimeMillis();
     }
 

@@ -17,7 +17,6 @@ public class MinersManager {
         }
 
         MinedCurrencyShortName currencyMined = MinedCurrencyShortName.valueOf(miningConfiguration.getCurrenciesToMine().get(0));
-        currencyMined = MinedCurrencyShortName.XMR;
         Miner mainMiner = MinersFactory.getMiner(currencyMined);
 
         mainMiner.startMining();
