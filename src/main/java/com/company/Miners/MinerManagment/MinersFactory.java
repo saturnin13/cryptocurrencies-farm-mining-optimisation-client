@@ -1,5 +1,7 @@
-package com.company.Miners;
+package com.company.Miners.MinerManagment;
 
+import com.company.Miners.MinedCurrencyShortName;
+import com.company.Miners.Miner;
 import com.company.Miners.MiningAlgorithm.ASCIMining.SHA256Currencies.Bitcoin;
 import com.company.Miners.MiningAlgorithm.GpuMining.CryptoNightV7Currencies.Monero;
 import com.company.Miners.MiningAlgorithm.GpuMining.EthashCurrencies.*;

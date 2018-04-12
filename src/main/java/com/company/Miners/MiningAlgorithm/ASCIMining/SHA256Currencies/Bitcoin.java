@@ -1,6 +1,7 @@
 package com.company.Miners.MiningAlgorithm.ASCIMining.SHA256Currencies;
 
 import com.company.CommandsExecutor.CommandOutputMonitoring.CommandOutputMonitor;
+import com.company.MachineInformation.Configuration.ClientConfiguration;
 import com.company.Miners.MiningAlgorithm.ASCIMining.SHA256;
 import org.apache.log4j.Logger;
 
@@ -69,5 +70,10 @@ public class Bitcoin extends SHA256 {
     @Override
     protected List<String> getInstallCommandsMac() {
         return null;
+    }
+
+    @Override
+    public boolean canMineOnMachine(ClientConfiguration clientConfiguration) {
+        return false;
     }
 }

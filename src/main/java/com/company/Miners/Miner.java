@@ -2,28 +2,33 @@ package com.company.Miners;
 
 import com.company.CommandsExecutor.CommandExecutor;
 import com.company.CommandsExecutor.CommandOutputMonitoring.CommandOutputMonitor;
+import com.company.MachineInformation.Configuration.ClientConfiguration;
 import com.company.MachineInformation.Configuration.OS.OSType;
 import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.util.List;
 
-import static com.company.CommandsExecutor.CommandExecutionEnvironment.BASH;
-import static com.company.CommandsExecutor.CommandExecutionEnvironment.POWERSHELL;
 import static com.company.MachineInformation.Configuration.OS.OSType.*;
-import static com.company.MachineInformation.MachineConfigurationRetriever.getMachineCharacteristics;
 import static com.company.Variables.LOCATION_MAIN_FOLDER;
 
 public abstract class Miner {
 
     private final static Logger logger = Logger.getLogger(Miner.class);
+
+    // TODO: refactor this pooladdress thing
+    protected Protocol protocol;
+    protected String poolAddressProtocol1;
+    protected int poolPortProtocol1;
+    protected String poolAddressProtocol2;
+    protected int poolPortProtocol2;
+
     protected MinedCurrencyShortName minedCurrencyShortName;
-    protected String poolAddress;
     private CommandExecutor miningThread;
 
-    public void startMining() {
+    public void startMining(OSType currentOsType, Protocol protocol) {
         logger.info("Starting to mine " + minedCurrencyShortName + " miner");
-        OSType currentOsType = getMachineCharacteristics().getOs().getOsType();
+        this.protocol = protocol;
         if(currentOsType == mac) {
             miningThread = getMiningThreadMac();
         } else if(currentOsType == linux) {
@@ -38,7 +43,9 @@ public abstract class Miner {
     }
 
     public void stopMining() {
-        miningThread.exit();
+        if(miningThread != null && miningThread.isAlive()) {
+            miningThread.exit();
+        }
     }
 
     private CommandExecutor getMiningThreadWindows() {
@@ -84,9 +91,8 @@ public abstract class Miner {
 
     protected abstract CommandOutputMonitor getOutputMonitoring();
 
-    public boolean install() {
+    public boolean install(OSType currentOsType) {
         logger.info("installing " + minedCurrencyShortName + " miner");
-        OSType currentOsType = getMachineCharacteristics().getOs().getOsType();
         if(currentOsType == mac) {
             installMac();
         } else if(currentOsType == linux) {
@@ -131,4 +137,6 @@ public abstract class Miner {
     }
 
     protected abstract List<String> getInstallCommandsMac();
+
+    public abstract boolean canMineOnMachine(ClientConfiguration clientConfiguration);
 }

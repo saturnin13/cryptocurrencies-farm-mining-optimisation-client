@@ -1,6 +1,5 @@
 package com.company.MachineInformation.Configuration.GPU;
 
-import com.company.CommandsExecutor.CommandExecutionEnvironment;
 import com.company.CommandsExecutor.CommandExecutor;
 import com.company.MachineInformation.Configuration.OS.OS;
 import com.company.MachineInformation.Configuration.OS.OSType;
@@ -12,9 +11,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.company.MachineInformation.Configuration.GPU.GPUType.amd;
-import static com.company.MachineInformation.Configuration.GPU.GPUType.intel;
-import static com.company.MachineInformation.Configuration.GPU.GPUType.nvidia;
+import static com.company.MachineInformation.Configuration.GPU.GPUType.openCl;
+import static com.company.MachineInformation.Configuration.GPU.GPUType.cuda;
 import static com.company.MachineInformation.Configuration.OS.OSType.linux;
 import static com.company.MachineInformation.Configuration.OS.OSType.mac;
 import static com.company.MachineInformation.Configuration.OS.OSType.windows;
@@ -46,19 +44,18 @@ public class GPUs {
         for (int i = 0; i < gpuTypes.length; i++) {
             GPU currentGpu = new GPU();
             if (RegexPatternMatcher.patternMatch("(NVIDIA)", CASE_INSENSITIVE, gpuTypes[i], 1)) {
-                currentGpu.setGpuType(nvidia);
+                currentGpu.setGpuType(cuda);
             } else if (RegexPatternMatcher.patternMatch("(AMD)", CASE_INSENSITIVE, gpuTypes[i], 1)) {
-                currentGpu.setGpuType(amd);
+                currentGpu.setGpuType(openCl);
             } else if (RegexPatternMatcher.patternMatch("(Intel)", CASE_INSENSITIVE, gpuTypes[i], 1)) {
-                currentGpu.setGpuType(intel);
+                currentGpu.setGpuType(openCl);
             } else {
                 logger.error("Gpu type could not be determined, defaulting to Nvidia");
-                currentGpu.setGpuType(nvidia);
+                currentGpu.setGpuType(cuda);
             }
             currentGpu.setMemorySize(Long.parseLong(gpuMemorySize[i]));
             result.add(currentGpu);
         }
-        System.out.println(result);
         return result;
     }
 

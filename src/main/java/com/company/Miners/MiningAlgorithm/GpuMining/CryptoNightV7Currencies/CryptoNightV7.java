@@ -18,14 +18,14 @@ public abstract class CryptoNightV7 extends Miner {
         return new ImmutableList.Builder<String>()
                 .add("cd " + LOCATION_MAIN_FOLDER + "/" + minedCurrencyShortName + "/" + "xmrig-nvidia-2.6.0-beta1-cuda8-win64")
                 .add("ls")
-                .add("./xmrig-nvidia.exe --print-time 1 --donate-level 1 -o " + poolAddress + " -u " + KEY_MONERO + " -p " + WORKER_NAME + " -k")
+                .add("./xmrig-nvidia.exe --print-time 1 --donate-level 1 -o " + poolAddressProtocol1 + ":" + poolPortProtocol1 + " -u " + KEY_MONERO + " -p " + WORKER_NAME + " -k")
                 .build();
     }
 
     @Override
     protected List<String> getMiningCleanUpCommandsWindows() {
         return new ImmutableList.Builder<String>()
-                .add("Stop-Process -Name xmrig-")
+                .add("Stop-Process -Name xmrig-nvidiag")
                 .build();
     }
 

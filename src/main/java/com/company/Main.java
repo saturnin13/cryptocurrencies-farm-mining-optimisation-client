@@ -1,14 +1,8 @@
 package com.company;
 
-import com.company.Client.HttpRequestHandling;
-import com.company.MachineInformation.Configuration.ClientConfiguration;
-import com.company.MachineInformation.MachineConfigurationRetriever;
-import com.company.Miners.MinersManager;
-import com.company.Miners.Configuration.MiningConfiguration;
+import com.company.Miners.MinerManagment.MinersManager;
 import com.company.MiningSoftware.MiningSoftware;
 import org.apache.log4j.Logger;
-
-import java.util.concurrent.TimeUnit;
 
 public class Main {
 

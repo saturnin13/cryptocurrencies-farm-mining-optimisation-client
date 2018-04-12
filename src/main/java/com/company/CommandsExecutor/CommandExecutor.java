@@ -97,6 +97,7 @@ public class CommandExecutor extends Thread {
         }
 
         if(cleanUpCommands != null) {
+            logger.info("Cleaning up with the following commands: " + cleanUpCommands);
             this.commands = cleanUpCommands;
             this.cleanUpCommands = null;
             this.verbose = false;

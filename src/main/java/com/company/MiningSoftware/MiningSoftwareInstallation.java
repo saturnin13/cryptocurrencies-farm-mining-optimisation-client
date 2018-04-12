@@ -1,15 +1,13 @@
 package com.company.MiningSoftware;
 
-import com.company.Main;
+import com.company.MachineInformation.MachineConfigurationRetriever;
 import com.company.Miners.MinedCurrencyShortName;
 import com.company.Miners.Miner;
-import com.company.Miners.MinersFactory;
+import com.company.Miners.MinerManagment.MinersFactory;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static com.company.Miners.MinedCurrencyShortName.*;
 
 public class MiningSoftwareInstallation {
 
@@ -22,7 +20,7 @@ public class MiningSoftwareInstallation {
         for (int i = 0; i < minedCurrencies.size(); i++) {
             Miner currentMiner = MinersFactory.getMiner(minedCurrencies.get(i));
             if(!currentMiner.isInstalled()) {
-                currentMiner.install();
+                currentMiner.install(MachineConfigurationRetriever.getMachineCharacteristics().getOs().getOsType());
             }
         }
 
