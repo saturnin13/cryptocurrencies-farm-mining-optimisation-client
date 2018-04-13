@@ -25,7 +25,7 @@ public class HttpRequestHandling {
         Gson g = new Gson();
         String jsonClientConfig = g.toJson(clientConfiguration);
         // TODO: remove hardcoding
-        jsonClientConfig = "{\"userEmail\":\"saturnin.13@hotmail.fr\", \"data\":{\"sysconfig\":{\"OS\":\"linux\"}, \"benchMarking\":[]}}";
+        jsonClientConfig = "{\"userEmail\":\"saturnin.13@hotmail.fr\", \"workerName\": \"" + getWorkerName() + ", \"data\":{\"sysconfig\":{\"OS\":\"linux\"}, \"benchMarking\":[]}}";
         String response = postRequest(requestAddress, jsonClientConfig, "POST");
         logger.info("Obtained the following mining configuration: " + response);
         return g.fromJson(response, MiningConfiguration.class);

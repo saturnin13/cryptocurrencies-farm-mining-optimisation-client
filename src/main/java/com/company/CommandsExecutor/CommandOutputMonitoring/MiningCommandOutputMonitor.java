@@ -2,16 +2,17 @@ package com.company.CommandsExecutor.CommandOutputMonitoring;
 
 import com.company.Client.HttpRequestHandling;
 import com.company.Miners.MinedCurrencyShortName;
+import com.company.Util.RegexPatternMatcher;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.company.Variables.HASHRATE_REPORTING_RATE;
+import static com.company.Variables.*;
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 public abstract class MiningCommandOutputMonitor implements CommandOutputMonitor {
     protected long lastUpdateTime;
     protected MinedCurrencyShortName currencyShortName;
-    private Float scaling;
 
     public MiningCommandOutputMonitor(MinedCurrencyShortName currencyShortName) {
         this.lastUpdateTime = 0;
@@ -32,23 +33,29 @@ public abstract class MiningCommandOutputMonitor implements CommandOutputMonitor
 
     // Get the second brace () from the regex so the implementation of this needs to have the value located in the second brace
     private Float getHashrate(String line) {
-        if (line == null) {
-            return null;
-        }
-        Pattern pattern = Pattern.compile(getHashrateRegex());
-        Matcher matcher = pattern.matcher(line);
-        Float result = null;
+        Float pattern = RegexPatternMatcher.findFloatPatternMatch(getHashrateRegex(), CASE_INSENSITIVE, line, 2);
+        return pattern == null ? null: pattern * getScaling(line);
+    }
 
-        if (matcher.find()) {
-            try {
-                result = Float.parseFloat(matcher.group(2));
-                result = result * getScaling(); // On 2 lines to catch exceptions and avoid program crashing
-            } catch (NumberFormatException e) {
-            }
-        }
-        return result;
+    protected String getHashrateUnitRegex() {
+        return "(|k|m|g|t)h( )?\\/( )?s";
     }
 
     protected abstract String getHashrateRegex();
-    protected abstract Float getScaling();
+
+    private Float getScaling(String line) {
+        if(RegexPatternMatcher.patternMatch("( )h( )?/( )?s", CASE_INSENSITIVE, line)) {
+            return 1F;
+        } else if(RegexPatternMatcher.patternMatch("kh( )?/( )?s", CASE_INSENSITIVE, line)) {
+            return KILO;
+        } else if(RegexPatternMatcher.patternMatch("mh( )?/( )?s", CASE_INSENSITIVE, line)) {
+            return MEGA;
+        } else if(RegexPatternMatcher.patternMatch("gh( )?/( )?s", CASE_INSENSITIVE, line)) {
+            return GIGA;
+        } else if(RegexPatternMatcher.patternMatch("th( )?/( )?s", CASE_INSENSITIVE, line)) {
+            return TERA;
+        } else {
+            return 0F;
+        }
+    }
 }

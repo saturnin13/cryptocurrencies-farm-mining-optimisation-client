@@ -10,11 +10,7 @@ public class XmrigNvidiaOutputMonitor extends MiningCommandOutputMonitor {
 
     @Override
     protected String getHashrateRegex() {
-        return "max:( )*(.*?) H/s";
+        return "max:( )*(.*?) " + getHashrateUnitRegex();
     }
 
-    @Override
-    protected Float getScaling() {
-        return 1F;
-    }
 }

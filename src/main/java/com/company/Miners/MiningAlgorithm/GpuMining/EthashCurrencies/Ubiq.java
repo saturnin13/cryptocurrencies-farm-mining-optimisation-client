@@ -17,5 +17,4 @@ public class Ubiq extends Ethash {
         poolPortProtocol2 = 8881;
         necessaryDagSize = (long) (1.11 * GIGA);
     }
-
 }

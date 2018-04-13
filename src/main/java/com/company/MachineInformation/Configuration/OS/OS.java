@@ -34,9 +34,9 @@ public class OS {
 
     private DataModel findDataModel() {
         String model = System.getProperty("sun.arch.data.model");
-        if(RegexPatternMatcher.patternMatch("(32)", model, 1)) {
+        if(RegexPatternMatcher.patternMatch("(32)", model)) {
             return DataModel.x32;
-        } else if(RegexPatternMatcher.patternMatch("(64)", model, 1)) {
+        } else if(RegexPatternMatcher.patternMatch("(64)", model)) {
             return DataModel.x64;
         } else {
             logger.error("Data model could not be determined, defaulting to x64");
@@ -46,11 +46,11 @@ public class OS {
 
     private OSType findType() {
         String name = System.getProperty("os.name");
-        if(RegexPatternMatcher.patternMatch("(Windows)", name, 1)) {
+        if(RegexPatternMatcher.patternMatch("(Windows)", name)) {
             return OSType.windows;
-        } else if(RegexPatternMatcher.patternMatch("(Mac)", name, 1)) {
+        } else if(RegexPatternMatcher.patternMatch("(Mac)", name)) {
             return OSType.mac;
-        } else if(RegexPatternMatcher.patternMatch("(Linux)", name, 1)) {
+        } else if(RegexPatternMatcher.patternMatch("(Linux)", name)) {
             return OSType.linux;
         } else {
             logger.error("Os type could not be determined, defaulting to Linux");

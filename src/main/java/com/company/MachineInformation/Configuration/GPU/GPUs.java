@@ -43,11 +43,11 @@ public class GPUs {
 
         for (int i = 0; i < gpuTypes.length; i++) {
             GPU currentGpu = new GPU();
-            if (RegexPatternMatcher.patternMatch("(NVIDIA)", CASE_INSENSITIVE, gpuTypes[i], 1)) {
+            if (RegexPatternMatcher.patternMatch("(NVIDIA)", CASE_INSENSITIVE, gpuTypes[i])) {
                 currentGpu.setGpuType(cuda);
-            } else if (RegexPatternMatcher.patternMatch("(AMD)", CASE_INSENSITIVE, gpuTypes[i], 1)) {
+            } else if (RegexPatternMatcher.patternMatch("(AMD)", CASE_INSENSITIVE, gpuTypes[i])) {
                 currentGpu.setGpuType(openCl);
-            } else if (RegexPatternMatcher.patternMatch("(Intel)", CASE_INSENSITIVE, gpuTypes[i], 1)) {
+            } else if (RegexPatternMatcher.patternMatch("(Intel)", CASE_INSENSITIVE, gpuTypes[i])) {
                 currentGpu.setGpuType(openCl);
             } else {
                 logger.error("Gpu type could not be determined, defaulting to Nvidia");

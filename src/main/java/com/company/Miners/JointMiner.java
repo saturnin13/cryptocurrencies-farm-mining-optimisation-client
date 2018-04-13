@@ -8,37 +8,22 @@ import java.util.List;
 public class JointMiner extends Miner {
 
     @Override
-    protected List<String> getMiningCommandsWindows() {
-        return null;
-    }
-
-    @Override
-    protected List<String> getMiningCleanUpCommandsWindows() {
-        return null;
-    }
-
-    @Override
-    protected List<String> getMiningCommandsLinux() {
-        return null;
-    }
-
-    @Override
-    protected List<String> getMiningCleanUpCommandsLinux() {
-        return null;
-    }
-
-    @Override
-    protected List<String> getMiningCommandsMac() {
-        return null;
-    }
-
-    @Override
-    protected List<String> getMiningCleanUpCommandsMac() {
-        return null;
-    }
-
-    @Override
     protected CommandOutputMonitor getOutputMonitoring() {
+        return null;
+    }
+
+    @Override
+    protected List<String> getExecuteMiningCommandsWindows() {
+        return null;
+    }
+
+    @Override
+    protected List<String> getExecuteMiningCommandsLinux() {
+        return null;
+    }
+
+    @Override
+    protected List<String> getExecuteMiningCommandsMac() {
         return null;
     }
 

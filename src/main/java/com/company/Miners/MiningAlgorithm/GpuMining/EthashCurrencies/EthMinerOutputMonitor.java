@@ -13,11 +13,6 @@ public class EthMinerOutputMonitor extends MiningCommandOutputMonitor {
 
     @Override
     public String getHashrateRegex() {
-        return "Speed( )*(.*?) Mh/s";
-    }
-
-    @Override
-    protected Float getScaling() {
-        return MEGA;
+        return "Speed( )*(.*?) "+ getHashrateUnitRegex();
     }
 }

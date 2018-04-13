@@ -5,6 +5,8 @@ import com.company.Miners.Miner;
 import com.company.Miners.MiningAlgorithm.ASCIMining.SHA256Currencies.Bitcoin;
 import com.company.Miners.MiningAlgorithm.GpuMining.CryptoNightV7Currencies.Monero;
 import com.company.Miners.MiningAlgorithm.GpuMining.EthashCurrencies.*;
+import com.company.Miners.MiningAlgorithm.GpuMining.GroestlCurrencies.Groestl;
+import com.company.Miners.MiningAlgorithm.GpuMining.GroestlCurrencies.Groestlcoin;
 import org.apache.log4j.Logger;
 
 public class MinersFactory {
@@ -19,6 +21,7 @@ public class MinersFactory {
     private static Miner pirl = new Pirl();
     private static Miner ubiq = new Ubiq();
     private static Miner monero = new Monero();
+    private static Miner groestlcoin = new Groestlcoin();
 
     public static Miner getMiner(MinedCurrencyShortName currencyShortName) {
         if (currencyShortName == null) {
@@ -35,6 +38,7 @@ public class MinersFactory {
             case PIRL : return pirl;
             case UBQ  : return ubiq;
             case XMR  : return monero;
+            case GRS  : return groestlcoin;
             default: logger.error("Could not find the miner object: " + currencyShortName + ", defaulting to ethereum miner");
             return new Ethereum();
         }
