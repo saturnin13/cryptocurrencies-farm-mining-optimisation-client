@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
+import static com.company.Variables.HARDCODED_EMAIL;
 import static com.company.Variables.POST_REQUEST_TIMEOUT;
 
 public class HttpRequestHandling {
@@ -25,7 +26,8 @@ public class HttpRequestHandling {
         Gson g = new Gson();
         String jsonClientConfig = g.toJson(clientConfiguration);
         // TODO: remove hardcoding
-        jsonClientConfig = "{\"userEmail\":\"saturnin.13@hotmail.fr\", \"workerName\": \"" + getWorkerName() + ", \"data\":{\"sysconfig\":{\"OS\":\"linux\"}, \"benchMarking\":[]}}";
+        jsonClientConfig = "{\"userEmail\":\"" + HARDCODED_EMAIL +"\", \"workerName\": \"" + getWorkerName() + "\", \"data\":{\"systemConfig\":{\"OS\":\"linux\"}, \"benchMarking\":[]}}";
+        System.out.println(jsonClientConfig);
         String response = postRequest(requestAddress, jsonClientConfig, "POST");
         logger.info("Obtained the following mining configuration: " + response);
         return g.fromJson(response, MiningConfiguration.class);
@@ -34,7 +36,7 @@ public class HttpRequestHandling {
     // TODO: set recurring work on the server to delete the workers records in the database which are no longer valid (give them a timestamp)
     public void reportMiningDiagnosis(MinedCurrencyShortName currency, float hashRate) {
         logger.info("Sending a report of mining diagnosis with currency " + currency + " and hashrate of " + hashRate + " H/s");
-        String request = "{\"userEmail\":\"saturnin.13@hotmail.fr\", \"workerName\": \"" + getWorkerName() + "\",\"currency\":\"" + currency + "\", \"hashrate\":\"" + hashRate + "\"}";
+        String request = "{\"userEmail\":\"" + HARDCODED_EMAIL +"\", \"workerName\": \"" + getWorkerName() + "\",\"currency\":\"" + currency + "\", \"hashrate\":\"" + hashRate + "\"}";
         postRequest(requestAddress, request, "PUT");
     }
 

@@ -2,8 +2,6 @@ package com.company.Miners.MiningAlgorithm.GpuMining.EthashCurrencies;
 
 import org.apache.log4j.Logger;
 
-import java.util.List;
-
 import static com.company.Miners.MinedCurrencyShortName.ETH;
 import static com.company.Variables.GIGA;
 

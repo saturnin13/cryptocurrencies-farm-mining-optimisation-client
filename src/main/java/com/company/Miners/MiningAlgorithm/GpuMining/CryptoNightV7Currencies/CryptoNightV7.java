@@ -2,13 +2,13 @@ package com.company.Miners.MiningAlgorithm.GpuMining.CryptoNightV7Currencies;
 
 import com.company.CommandsExecutor.CommandOutputMonitoring.CommandOutputMonitor;
 import com.company.MachineInformation.Configuration.ClientConfiguration;
+import com.company.Miners.KeyManager;
 import com.company.Miners.Miner;
 import com.google.common.collect.ImmutableList;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.company.Variables.KEY_MONERO;
 import static com.company.Variables.WORKER_NAME;
 
 public abstract class CryptoNightV7 extends Miner {
@@ -24,7 +24,7 @@ public abstract class CryptoNightV7 extends Miner {
     protected List<String> getExecuteMiningCommandsWindows() {
         return new ImmutableList.Builder<String>()
                 .add("./xmrig-nvidia-2.6.0-beta1-cuda8-win64/xmrig-nvidia.exe --print-time 1 --donate-level 1 -o "
-                        + poolAddressProtocol1 + ":" + poolPortProtocol1 + " -u " + KEY_MONERO + " -p " + WORKER_NAME + " -k")
+                        + poolAddressProtocol1 + ":" + poolPortProtocol1 + " -u " + KeyManager.getKey(minedCurrencyShortName) + " -p " + WORKER_NAME + " -k")
                 .build();
     }
 

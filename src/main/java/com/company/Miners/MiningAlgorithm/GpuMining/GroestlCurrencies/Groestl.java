@@ -2,6 +2,7 @@ package com.company.Miners.MiningAlgorithm.GpuMining.GroestlCurrencies;
 
 import com.company.CommandsExecutor.CommandOutputMonitoring.CommandOutputMonitor;
 import com.company.MachineInformation.Configuration.ClientConfiguration;
+import com.company.Miners.KeyManager;
 import com.company.Miners.Miner;
 import com.google.common.collect.ImmutableList;
 
@@ -21,7 +22,7 @@ public abstract class Groestl extends Miner {
     @Override
     protected List<String> getExecuteMiningCommandsWindows() {
         return new ImmutableList.Builder<String>()
-                .add("./ccminer-x64 -a groestl -o \"" + poolAddressProtocol1 + ":" + poolPortProtocol1 + "\" -u " + KEY_GROESTLCOIN + "." + WORKER_NAME + " -p 1")
+                .add("./ccminer-x64 -a groestl -o \"" + poolAddressProtocol1 + ":" + poolPortProtocol1 + "\" -u " + KeyManager.getKey(minedCurrencyShortName) + "." + WORKER_NAME + " -p 1")
                 .build();
     }
 

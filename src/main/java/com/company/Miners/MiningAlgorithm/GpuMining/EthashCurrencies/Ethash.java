@@ -3,6 +3,7 @@ package com.company.Miners.MiningAlgorithm.GpuMining.EthashCurrencies;
 import com.company.CommandsExecutor.CommandExecutor;
 import com.company.CommandsExecutor.CommandOutputMonitoring.CommandOutputMonitor;
 import com.company.MachineInformation.Configuration.ClientConfiguration;
+import com.company.Miners.KeyManager;
 import com.company.Miners.Miner;
 import com.google.common.collect.ImmutableList;
 import org.apache.log4j.Logger;
@@ -70,10 +71,10 @@ public abstract class Ethash extends Miner {
         if(protocol == MAIN) { // stratum protocol
             return  Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 -U -F http://127.0.0.1:8080/");
         } else if(protocol == SECONDARY){ // Getwork
-            return Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 -U -F " + poolAddressProtocol2 + ":" + poolPortProtocol2 + "/" + KEY_ETHEREUM + "/" + WORKER_NAME);
+            return Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 -U -F " + poolAddressProtocol2 + ":" + poolPortProtocol2 + "/" + KeyManager.getKey(minedCurrencyShortName) + "/" + WORKER_NAME);
         } else { // Genoils Miner using stratum mode
             //TODO the SP parameter must be changed depending on the pool
-            return Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 -U -S " + poolAddressProtocol1 + ":" + poolPortProtocol1 + " -SP 1 -O " + KEY_ETHEREUM + ":" + WORKER_NAME);
+            return Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 -U -S " + poolAddressProtocol1 + ":" + poolPortProtocol1 + " -SP 1 -O " + KeyManager.getKey(minedCurrencyShortName) + ":" + WORKER_NAME);
         }
     }
 
@@ -116,10 +117,10 @@ public abstract class Ethash extends Miner {
         if(protocol == MAIN) { // stratum protocol
             return  Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 -U -F http://127.0.0.1:8080/");
         } else if(protocol == SECONDARY){ // Getwork
-            return Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 -U -F " + poolAddressProtocol2 + ":" + poolPortProtocol2 + "/" + KEY_ETHEREUM + "/" + WORKER_NAME);
+            return Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 -U -F " + poolAddressProtocol2 + ":" + poolPortProtocol2 + "/" + KeyManager.getKey(minedCurrencyShortName) + "/" + WORKER_NAME);
         } else { // Genoils Miner using stratum mode
             //TODO the SP parameter must be changed depending on the pool
-            return Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 -U -S " + poolAddressProtocol1 + ":" + poolPortProtocol1 + " -SP 1 -O " + KEY_ETHEREUM + ":" + WORKER_NAME);
+            return Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 -U -S " + poolAddressProtocol1 + ":" + poolPortProtocol1 + " -SP 1 -O " + KeyManager.getKey(minedCurrencyShortName) + ":" + WORKER_NAME);
         }
     }
 
@@ -141,7 +142,7 @@ public abstract class Ethash extends Miner {
         return new ImmutableList.Builder<String>()
                 .add("cd eth-proxy-win/eth-proxy")
                 .add("(Get-Content ./eth-proxy.conf) -replace 'HOST = \\\"0.0.0.0\\\"', 'HOST = \\\"127.0.0.1\\\"' | Set-Content ./eth-proxy.conf")
-                .add("(Get-Content ./eth-proxy.conf) -replace 'WALLET = \\\"XXXXXX\\\"', 'WALLET = \\\"" + KEY_ETHEREUM + "\\\"' | Set-Content ./eth-proxy.conf")
+                .add("(Get-Content ./eth-proxy.conf) -replace 'WALLET = \\\"XXXXXX\\\"', 'WALLET = \\\"" + KeyManager.getKey(minedCurrencyShortName) + "\\\"' | Set-Content ./eth-proxy.conf")
                 .build();
     }
 
