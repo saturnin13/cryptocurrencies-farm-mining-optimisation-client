@@ -11,8 +11,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.company.MachineInformation.Configuration.GPU.GPUType.openCl;
-import static com.company.MachineInformation.Configuration.GPU.GPUType.cuda;
+import static com.company.MachineInformation.Configuration.GPU.GPUType.OPEN_CL;
+import static com.company.MachineInformation.Configuration.GPU.GPUType.CUDA;
 import static com.company.MachineInformation.Configuration.OS.OSType.linux;
 import static com.company.MachineInformation.Configuration.OS.OSType.mac;
 import static com.company.MachineInformation.Configuration.OS.OSType.windows;
@@ -32,7 +32,7 @@ public class GPUs {
     private List<GPU> findGpus() {
         List<GPU> result = new LinkedList<>();
 
-        String[] gpuTypes = CommandExecutor.builder().commands(Arrays.asList((commandGetDescription())))
+        String[] gpuDescription = CommandExecutor.builder().commands(Arrays.asList((commandGetDescription())))
                 .build()
                 .runAndReturn()
                 .split("\\r?\\n");
@@ -41,22 +41,35 @@ public class GPUs {
                 .runAndReturn()
                 .split("\\r?\\n");
 
-        for (int i = 0; i < gpuTypes.length; i++) {
+        for (int i = 0; i < gpuDescription.length; i++) {
             GPU currentGpu = new GPU();
-            if (RegexPatternMatcher.patternMatch("(NVIDIA)", CASE_INSENSITIVE, gpuTypes[i])) {
-                currentGpu.setGpuType(cuda);
-            } else if (RegexPatternMatcher.patternMatch("(AMD)", CASE_INSENSITIVE, gpuTypes[i])) {
-                currentGpu.setGpuType(openCl);
-            } else if (RegexPatternMatcher.patternMatch("(Intel)", CASE_INSENSITIVE, gpuTypes[i])) {
-                currentGpu.setGpuType(openCl);
+            if (RegexPatternMatcher.patternMatch("(NVIDIA)", CASE_INSENSITIVE, gpuDescription[i])) {
+                currentGpu.setGpuType(CUDA);
+            } else if (RegexPatternMatcher.patternMatch("(AMD)", CASE_INSENSITIVE, gpuDescription[i])) {
+                currentGpu.setGpuType(OPEN_CL);
+            } else if (RegexPatternMatcher.patternMatch("(Intel)", CASE_INSENSITIVE, gpuDescription[i])) {
+                currentGpu.setGpuType(OPEN_CL);
             } else {
                 logger.error("Gpu type could not be determined, defaulting to Nvidia");
-                currentGpu.setGpuType(cuda);
+                currentGpu.setGpuType(CUDA);
             }
             currentGpu.setMemorySize(Long.parseLong(gpuMemorySize[i]));
+            currentGpu.setGraphicCard(determineGraphicCard(gpuDescription[i]));
             result.add(currentGpu);
         }
         return result;
+    }
+
+    private GraphicCard determineGraphicCard(String gpuModel) {
+        List<GraphicCard> graphicCards = Arrays.asList(GraphicCard.values());
+        graphicCards.sort((v1, v2) -> v2.toString().length() - v1.toString().length()); // To avoid GTX 1080 TI to be confused with GTX 1080
+        for (GraphicCard graphicCard : GraphicCard.values()) {
+            String regexGraphicCard = graphicCard.toString().replaceAll("_", ".*");
+            if(RegexPatternMatcher.patternMatch("(" + regexGraphicCard + ")", CASE_INSENSITIVE, gpuModel)) {
+                return graphicCard;
+            }
+        }
+        return null;
     }
 
     // TODO: remove duplication

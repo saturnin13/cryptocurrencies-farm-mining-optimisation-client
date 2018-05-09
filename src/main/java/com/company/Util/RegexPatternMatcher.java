@@ -23,7 +23,7 @@ public class RegexPatternMatcher {
     }
 
 
-    public static String findPatternMatch(String regex, int regexoptions, String text, int bracesNumber) {
+    private static String findPatternMatch(String regex, int regexoptions, String text, int bracesNumber) {
         if (text == null) {
             return null;
         }

@@ -97,8 +97,8 @@ public abstract class Ethash extends Miner {
     // TODO put les export de partout
     // TODO: create an abstraction to generate the commands for the current machine
     // TODO: change the location to variables
-    // TODO: mine with -G for openCl and -U for cuda
-    // TODO: error "Insufficient CUDA driver: 8000" if driver cuda not up to date
+    // TODO: mine with -G for OPEN_CL and -U for CUDA
+    // TODO: error "Insufficient CUDA driver: 8000" if driver CUDA not up to date
     @Override
     protected void miningSetUpActionsMac() {
         if(protocol == MAIN) { // stratum protocol

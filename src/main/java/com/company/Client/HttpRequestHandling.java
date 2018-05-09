@@ -1,6 +1,7 @@
 package com.company.Client;
 
 import com.company.MachineInformation.Configuration.ClientConfiguration;
+import com.company.MachineInformation.MachineConfigurationRetriever;
 import com.company.Miners.Configuration.MiningConfiguration;
 import com.company.Miners.MinedCurrencyShortName;
 import com.google.gson.Gson;
@@ -25,10 +26,11 @@ public class HttpRequestHandling {
 
         Gson g = new Gson();
         String jsonClientConfig = g.toJson(clientConfiguration);
+
         // TODO: remove hardcoding
-        jsonClientConfig = "{\"userEmail\":\"" + HARDCODED_EMAIL +"\", \"workerName\": \"" + getWorkerName() + "\", \"data\":{\"systemConfig\":{\"OS\":\"linux\"}, \"benchMarking\":[]}}";
-        System.out.println(jsonClientConfig);
+        jsonClientConfig = "{\"userEmail\":\"" + HARDCODED_EMAIL +"\", \"workerName\": \"" + getWorkerName() + "\", \"data\":{\"systemConfig\":" + jsonClientConfig + ", \"benchMarking\":[]}}";
         String response = postRequest(requestAddress, jsonClientConfig, "POST");
+
         logger.info("Obtained the following mining configuration: " + response);
         return g.fromJson(response, MiningConfiguration.class);
     }
