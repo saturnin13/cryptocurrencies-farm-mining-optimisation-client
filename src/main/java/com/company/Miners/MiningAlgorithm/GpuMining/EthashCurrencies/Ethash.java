@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.company.Client.JsonFormat.General.GPU.GPUType.CUDA;
 import static com.company.Miners.Protocol.MAIN;
 import static com.company.Miners.Protocol.SECONDARY;
 import static com.company.Variables.*;
@@ -69,12 +70,15 @@ public abstract class Ethash extends Miner {
     @Override
     protected List<String> getExecuteMiningCommandsWindows() {
         if(protocol == MAIN) { // stratum protocol
-            return  Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 -U -F http://127.0.0.1:8080/");
+            return  Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 " + (gpu.getGpuType() == CUDA ? "-U":"-G") + " -F http://127.0.0.1:8080/ "
+                    + (gpu.getGpuType() == CUDA ? "--cuda-devices":"--opencl-device") + " " + gpu.getId());
         } else if(protocol == SECONDARY){ // Getwork
-            return Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 -U -F " + poolAddressProtocol2 + ":" + poolPortProtocol2 + "/" + KeyManager.getKey(minedCurrencyShortName) + "/" + WORKER_NAME);
+            return Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 " + (gpu.getGpuType() == CUDA ? "-U":"-G") + " -F " + poolAddressProtocol2 + ":" + poolPortProtocol2 + "/" + KeyManager.getKey(minedCurrencyShortName) + "/" + WORKER_NAME + " "
+                    + (gpu.getGpuType() == CUDA ? "--cuda-devices":"--opencl-device") + " " + gpu.getId());
         } else { // Genoils Miner using stratum mode
             //TODO the SP parameter must be changed depending on the pool
-            return Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 -U -S " + poolAddressProtocol1 + ":" + poolPortProtocol1 + " -SP 1 -O " + KeyManager.getKey(minedCurrencyShortName) + ":" + WORKER_NAME);
+            return Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 " + (gpu.getGpuType() == CUDA ? "-U":"-G") + " -S " + poolAddressProtocol1 + ":" + poolPortProtocol1 + " -SP 1 -O " + KeyManager.getKey(minedCurrencyShortName) + ":" + WORKER_NAME + " "
+                    + (gpu.getGpuType() == CUDA ? "--cuda-devices":"--opencl-device") + " " + gpu.getId());
         }
     }
 
@@ -115,12 +119,15 @@ public abstract class Ethash extends Miner {
     @Override
     protected List<String> getExecuteMiningCommandsMac() {
         if(protocol == MAIN) { // stratum protocol
-            return  Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 -U -F http://127.0.0.1:8080/");
+            return  Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 " + (gpu.getGpuType() == CUDA ? "-U":"-G") + " -F http://127.0.0.1:8080/ "
+                    + (gpu.getGpuType() == CUDA ? "--cuda-devices":"--opencl-device") + " " + gpu.getId());
         } else if(protocol == SECONDARY){ // Getwork
-            return Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 -U -F " + poolAddressProtocol2 + ":" + poolPortProtocol2 + "/" + KeyManager.getKey(minedCurrencyShortName) + "/" + WORKER_NAME);
+            return Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 " + (gpu.getGpuType() == CUDA ? "-U":"-G") + " -F " + poolAddressProtocol2 + ":" + poolPortProtocol2 + "/" + KeyManager.getKey(minedCurrencyShortName) + "/" + WORKER_NAME + " "
+                    + (gpu.getGpuType() == CUDA ? "--cuda-devices":"--opencl-device") + " " + gpu.getId());
         } else { // Genoils Miner using stratum mode
             //TODO the SP parameter must be changed depending on the pool
-            return Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 -U -S " + poolAddressProtocol1 + ":" + poolPortProtocol1 + " -SP 1 -O " + KeyManager.getKey(minedCurrencyShortName) + ":" + WORKER_NAME);
+            return Arrays.asList("./ethminer-0.12.0-Windows/bin/ethminer --farm-recheck 200 " + (gpu.getGpuType() == CUDA ? "-U":"-G") + " -S " + poolAddressProtocol1 + ":" + poolPortProtocol1 + " -SP 1 -O " + KeyManager.getKey(minedCurrencyShortName) + ":" + WORKER_NAME + " "
+                    + (gpu.getGpuType() == CUDA ? "--cuda-devices":"--opencl-device") + " " + gpu.getId());
         }
     }
 

@@ -32,10 +32,14 @@ public class GpuInformationRetriever {
                 .runAndReturn()
                 .split("\\r?\\n");
 
+        int numberOfCuda = 0;
+
         for (int i = 0; i < gpuDescription.length; i++) {
             GPU currentGpu = new GPU();
             if (RegexPatternMatcher.patternMatch("(NVIDIA)", CASE_INSENSITIVE, gpuDescription[i])) {
                 currentGpu.setGpuType(GPUType.CUDA);
+                currentGpu.setCudaId(numberOfCuda);
+                numberOfCuda++;
             } else if (RegexPatternMatcher.patternMatch("(AMD)", CASE_INSENSITIVE, gpuDescription[i])) {
                 currentGpu.setGpuType(GPUType.OPEN_CL);
             } else if (RegexPatternMatcher.patternMatch("(Intel)", CASE_INSENSITIVE, gpuDescription[i])) {

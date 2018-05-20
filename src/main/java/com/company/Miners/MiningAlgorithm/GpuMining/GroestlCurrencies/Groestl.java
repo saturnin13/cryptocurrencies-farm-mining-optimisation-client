@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.company.Client.JsonFormat.General.GPU.GPUType.CUDA;
 import static com.company.Variables.*;
 
 public abstract class Groestl extends Miner {
@@ -22,7 +23,8 @@ public abstract class Groestl extends Miner {
     @Override
     protected List<String> getExecuteMiningCommandsWindows() {
         return new ImmutableList.Builder<String>()
-                .add("./ccminer-x64 -a groestl -o \"" + poolAddressProtocol1 + ":" + poolPortProtocol1 + "\" -u " + KeyManager.getKey(minedCurrencyShortName) + "." + WORKER_NAME + " -p 1")
+                .add("./ccminer-x64 -a groestl -o \"" + poolAddressProtocol1 + ":" + poolPortProtocol1 + "\" -u " + KeyManager.getKey(minedCurrencyShortName) + "." + WORKER_NAME + " -p 1 "
+                        + "--devices " + gpu.getCudaId())
                 .build();
     }
 
@@ -44,6 +46,6 @@ public abstract class Groestl extends Miner {
 
     @Override
     public boolean canMineOnMachine(ClientConfiguration clientConfiguration) {
-        return true;
+        return gpu.getGpuType() == CUDA;
     }
 }

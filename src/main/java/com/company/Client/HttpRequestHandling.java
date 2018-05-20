@@ -40,7 +40,6 @@ public class HttpRequestHandling {
 
         Gson g = new Gson();
         String request = g.toJson(ReportMiningDiagnosisRequest.builder().userEmail(HARDCODED_EMAIL).workerName(getWorkerName()).data(reportMiningDiagnosisRequestData).build());
-        System.out.println(request);
         postRequest(requestAddress, request, "PUT");
     }
 
