@@ -1,8 +1,9 @@
 package com.company.CommandsExecutor;
 
 import com.company.CommandsExecutor.CommandOutputMonitoring.CommandOutputMonitor;
-import com.company.MachineInformation.Configuration.OS.OS;
-import com.company.MachineInformation.MachineConfigurationRetriever;
+import com.company.Client.JsonFormat.ClientJson.MiningConfiguration.ClientConfiguration.OS.CommandExecutionEnvironment;
+import com.company.Client.JsonFormat.ClientJson.MiningConfiguration.ClientConfiguration.OS.OS;
+import com.company.MachineInformation.OSInformationRetriever;
 import lombok.Builder;
 import org.apache.log4j.Logger;
 
@@ -12,8 +13,8 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.company.CommandsExecutor.CommandExecutionEnvironment.BASH;
-import static com.company.CommandsExecutor.CommandExecutionEnvironment.POWERSHELL;
+import static com.company.Client.JsonFormat.ClientJson.MiningConfiguration.ClientConfiguration.OS.CommandExecutionEnvironment.BASH;
+import static com.company.Client.JsonFormat.ClientJson.MiningConfiguration.ClientConfiguration.OS.CommandExecutionEnvironment.POWERSHELL;
 
 @Builder
 public class CommandExecutor extends Thread {
@@ -40,7 +41,7 @@ public class CommandExecutor extends Thread {
         String shellUsed;
         String commandOption;
         // Exceptionally OS class is accessed directly instead of the MachineConfigurationRetriever class to avoid mutual dependencies and stack overflow
-        OS os = new OS();
+        OS os = OSInformationRetriever.retrieveOs();
         CommandExecutionEnvironment environment = os.getEnvironment();
         if(environment == POWERSHELL) {
             delimiter = ";";

@@ -2,9 +2,7 @@ package com.company.Miners.MiningAlgorithm.GpuMining.GroestlCurrencies;
 
 import org.apache.log4j.Logger;
 
-import java.util.List;
-
-import static com.company.Miners.MinedCurrencyShortName.GRS;
+import static com.company.Client.JsonFormat.General.MinedCurrencyShortName.GRS;
 
 public class Groestlcoin extends Groestl {
     private final static Logger logger = Logger.getLogger(Groestlcoin.class);

@@ -1,7 +1,7 @@
 package com.company.Miners;
 
+import com.company.Client.JsonFormat.ClientJson.MiningConfiguration.ClientConfiguration.ClientConfiguration;
 import com.company.CommandsExecutor.CommandOutputMonitoring.CommandOutputMonitor;
-import com.company.MachineInformation.Configuration.ClientConfiguration;
 
 import java.util.List;
 

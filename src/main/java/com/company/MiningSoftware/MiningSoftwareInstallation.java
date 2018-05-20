@@ -1,7 +1,7 @@
 package com.company.MiningSoftware;
 
 import com.company.MachineInformation.MachineConfigurationRetriever;
-import com.company.Miners.MinedCurrencyShortName;
+import com.company.Client.JsonFormat.General.MinedCurrencyShortName;
 import com.company.Miners.Miner;
 import com.company.Miners.MinerManagment.MinersFactory;
 import org.apache.log4j.Logger;

@@ -1,7 +1,6 @@
 package com.company.Miners;
 
-import com.company.MachineInformation.Configuration.GPU.GPUs;
-import com.company.Miners.MiningAlgorithm.GpuMining.EthashCurrencies.Ethereum;
+import com.company.Client.JsonFormat.General.MinedCurrencyShortName;
 import org.apache.log4j.Logger;
 
 import static com.company.Variables.*;

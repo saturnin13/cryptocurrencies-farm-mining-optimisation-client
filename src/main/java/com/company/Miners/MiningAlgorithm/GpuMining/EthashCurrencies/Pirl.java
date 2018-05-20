@@ -1,9 +1,9 @@
 package com.company.Miners.MiningAlgorithm.GpuMining.EthashCurrencies;
 
-import com.company.MachineInformation.Configuration.ClientConfiguration;
+import com.company.Client.JsonFormat.ClientJson.MiningConfiguration.ClientConfiguration.ClientConfiguration;
 import org.apache.log4j.Logger;
 
-import static com.company.Miners.MinedCurrencyShortName.PIRL;
+import static com.company.Client.JsonFormat.General.MinedCurrencyShortName.PIRL;
 import static com.company.Variables.GIGA;
 
 public class Pirl extends Ethash {

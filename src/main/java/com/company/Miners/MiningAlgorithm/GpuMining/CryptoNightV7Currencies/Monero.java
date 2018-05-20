@@ -1,11 +1,8 @@
 package com.company.Miners.MiningAlgorithm.GpuMining.CryptoNightV7Currencies;
 
-import com.company.MachineInformation.Configuration.ClientConfiguration;
 import org.apache.log4j.Logger;
 
-import java.util.List;
-
-import static com.company.Miners.MinedCurrencyShortName.XMR;
+import static com.company.Client.JsonFormat.General.MinedCurrencyShortName.XMR;
 
 public class Monero extends CryptoNightV7 {
     private final static Logger logger = Logger.getLogger(Monero.class);

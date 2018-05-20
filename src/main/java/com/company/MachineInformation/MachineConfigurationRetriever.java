@@ -1,8 +1,7 @@
 package com.company.MachineInformation;
 
-import com.company.MachineInformation.Configuration.ClientConfiguration;
-import com.company.MachineInformation.Configuration.GPU.GPUs;
-import com.company.MachineInformation.Configuration.OS.OS;
+import com.company.Client.JsonFormat.ClientJson.MiningConfiguration.ClientConfiguration.ClientConfiguration;
+import com.company.Client.JsonFormat.ClientJson.MiningConfiguration.ClientConfiguration.OS.OS;
 import org.apache.log4j.Logger;
 
 public class MachineConfigurationRetriever {
@@ -14,9 +13,10 @@ public class MachineConfigurationRetriever {
     public static ClientConfiguration getMachineCharacteristics() {
         if(clientConfiguration == null) {
             logger.info("Gathering client configurations");
+            OS os = OSInformationRetriever.retrieveOs();
             clientConfiguration = ClientConfiguration.builder()
-                    .os(new OS())
-                    .gpus(new GPUs())
+                    .os(os)
+                    .gpus(GpuInformationRetriever.retrieveGpus(os))
                     .build();
         }
 

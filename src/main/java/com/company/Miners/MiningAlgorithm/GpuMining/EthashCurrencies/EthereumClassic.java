@@ -2,7 +2,7 @@ package com.company.Miners.MiningAlgorithm.GpuMining.EthashCurrencies;
 
 import org.apache.log4j.Logger;
 
-import static com.company.Miners.MinedCurrencyShortName.ETC;
+import static com.company.Client.JsonFormat.General.MinedCurrencyShortName.ETC;
 import static com.company.Variables.GIGA;
 
 public class EthereumClassic extends Ethash {

@@ -1,10 +1,12 @@
 package com.company.Miners.MinerManagment;
 
 import com.company.Client.HttpRequestHandling;
-import com.company.MachineInformation.Configuration.ClientConfiguration;
+import com.company.Client.JsonFormat.ClientJson.MiningConfiguration.ClientConfiguration.ClientConfiguration;
+import com.company.Client.JsonFormat.ClientJson.MiningConfiguration.MiningConfigurationRequestData;
+import com.company.Client.JsonFormat.ServerJson.MiningConfiguration.GraphicCardMiningConfiguration.GraphicCardMiningConfiguration;
+import com.company.Client.JsonFormat.ServerJson.MiningConfigurationResponse;
 import com.company.MachineInformation.MachineConfigurationRetriever;
-import com.company.Miners.Configuration.MiningConfiguration;
-import com.company.Miners.MinedCurrencyShortName;
+import com.company.Client.JsonFormat.General.MinedCurrencyShortName;
 import org.apache.log4j.Logger;
 
 import java.util.concurrent.TimeUnit;
@@ -16,19 +18,20 @@ public class MinersManager {
     private final static Logger logger = Logger.getLogger(MinersManager.class);
 
     private MinedCurrencyShortName currentlyMinedCurrency;
-    private MiningConfiguration miningConfiguration;
 
     public void launchMiners() {
         ClientConfiguration clientConfig = MachineConfigurationRetriever.getMachineCharacteristics();
         HttpRequestHandling httpRequestHandling = new HttpRequestHandling();
 
         while(true) {
-            miningConfiguration = httpRequestHandling.getMiningConfiguration(clientConfig);
-            MinedCurrencyShortName newCurrency = chooseMiner();
+            MiningConfigurationResponse miningConfiguration = httpRequestHandling.getMiningConfiguration(MiningConfigurationRequestData.builder().clientConfiguration(clientConfig).build());
+            for(GraphicCardMiningConfiguration graphicCardMiningConfiguration: miningConfiguration.getCurrenciesConfiguration()) {
+                MinedCurrencyShortName newCurrency = chooseMiner(graphicCardMiningConfiguration, graphicCardMiningConfiguration.isActivateMining());
 
-            if(newCurrency != currentlyMinedCurrency) {
-                MinersStarter.startMiner(newCurrency);
-                currentlyMinedCurrency = newCurrency;
+                if(newCurrency != currentlyMinedCurrency) {
+                    MinersStarter.startMiner(newCurrency, graphicCardMiningConfiguration.getGpu());
+                    currentlyMinedCurrency = newCurrency;
+                }
             }
 
             sleepMinersManager();
@@ -43,13 +46,13 @@ public class MinersManager {
         }
     }
 
-    private MinedCurrencyShortName chooseMiner() {
-        if(!isMiningBeActivated()) {
+    private MinedCurrencyShortName chooseMiner(GraphicCardMiningConfiguration graphicCardMiningConfiguration, boolean isActivateMining) {
+        if(!isMiningBeActivated(graphicCardMiningConfiguration, isActivateMining)) {
             logger.warn("Mining is deactivated");
             return null;
         }
 
-        for (MinedCurrencyShortName currency : miningConfiguration.getCurrenciesToMine()) {
+        for (MinedCurrencyShortName currency : graphicCardMiningConfiguration.getCurrenciesToMine()) {
             if(MinersFactory.getMiner(currency).canMineOnMachine(MachineConfigurationRetriever.getMachineCharacteristics())) {
                 return currency;
             } else {
@@ -61,7 +64,7 @@ public class MinersManager {
         return null;
     }
 
-    private boolean isMiningBeActivated() {
-        return miningConfiguration.isActivateMining() && !miningConfiguration.getCurrenciesToMine().isEmpty();
+    private boolean isMiningBeActivated(GraphicCardMiningConfiguration graphicCardMiningConfiguration, boolean isActivateMining) {
+        return isActivateMining && !graphicCardMiningConfiguration.getCurrenciesToMine().isEmpty();
     }
 }

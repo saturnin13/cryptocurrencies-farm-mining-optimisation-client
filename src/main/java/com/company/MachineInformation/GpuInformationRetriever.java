@@ -1,42 +1,33 @@
-package com.company.MachineInformation.Configuration.GPU;
+package com.company.MachineInformation;
 
+import com.company.Client.JsonFormat.ClientJson.MiningConfiguration.ClientConfiguration.OS.OS;
+import com.company.Client.JsonFormat.ClientJson.MiningConfiguration.ClientConfiguration.OS.OSType;
+import com.company.Client.JsonFormat.General.GPU.GPU;
+import com.company.Client.JsonFormat.General.GPU.GPUType;
+import com.company.Client.JsonFormat.General.GPU.GraphicCard;
 import com.company.CommandsExecutor.CommandExecutor;
-import com.company.MachineInformation.Configuration.OS.OS;
-import com.company.MachineInformation.Configuration.OS.OSType;
 import com.company.Util.RegexPatternMatcher;
-import lombok.Data;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.company.MachineInformation.Configuration.GPU.GPUType.OPEN_CL;
-import static com.company.MachineInformation.Configuration.GPU.GPUType.CUDA;
-import static com.company.MachineInformation.Configuration.OS.OSType.linux;
-import static com.company.MachineInformation.Configuration.OS.OSType.mac;
-import static com.company.MachineInformation.Configuration.OS.OSType.windows;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
-@Data
-public class GPUs {
+public class GpuInformationRetriever {
 
-    private final static Logger logger = Logger.getLogger(GPUs.class);
+    private final static Logger logger = Logger.getLogger(GpuInformationRetriever.class);
 
-    private List<GPU> gpus;
 
-    public GPUs() {
-        this.gpus = findGpus();
-    }
-
-    private List<GPU> findGpus() {
+    public static List<GPU> retrieveGpus(OS os) {
         List<GPU> result = new LinkedList<>();
 
-        String[] gpuDescription = CommandExecutor.builder().commands(Arrays.asList((commandGetDescription())))
+        String[] gpuDescription = CommandExecutor.builder().commands(Arrays.asList((commandGetDescription(os.getOsType()))))
                 .build()
                 .runAndReturn()
                 .split("\\r?\\n");
-        String[] gpuMemorySize = CommandExecutor.builder().commands(Arrays.asList((commandGetAdapterRAM())))
+        String[] gpuMemorySize = CommandExecutor.builder().commands(Arrays.asList((commandGetAdapterRAM(os.getOsType()))))
                 .build()
                 .runAndReturn()
                 .split("\\r?\\n");
@@ -44,23 +35,24 @@ public class GPUs {
         for (int i = 0; i < gpuDescription.length; i++) {
             GPU currentGpu = new GPU();
             if (RegexPatternMatcher.patternMatch("(NVIDIA)", CASE_INSENSITIVE, gpuDescription[i])) {
-                currentGpu.setGpuType(CUDA);
+                currentGpu.setGpuType(GPUType.CUDA);
             } else if (RegexPatternMatcher.patternMatch("(AMD)", CASE_INSENSITIVE, gpuDescription[i])) {
-                currentGpu.setGpuType(OPEN_CL);
+                currentGpu.setGpuType(GPUType.OPEN_CL);
             } else if (RegexPatternMatcher.patternMatch("(Intel)", CASE_INSENSITIVE, gpuDescription[i])) {
-                currentGpu.setGpuType(OPEN_CL);
+                continue;
             } else {
-                logger.error("Gpu type could not be determined, defaulting to Nvidia");
-                currentGpu.setGpuType(CUDA);
+                logger.error("Gpu type could not be determined");
+                continue;
             }
             currentGpu.setMemorySize(Long.parseLong(gpuMemorySize[i]));
             currentGpu.setGraphicCard(determineGraphicCard(gpuDescription[i]));
+            currentGpu.setId(i);
             result.add(currentGpu);
         }
         return result;
     }
 
-    private GraphicCard determineGraphicCard(String gpuModel) {
+    private static GraphicCard determineGraphicCard(String gpuModel) {
         List<GraphicCard> graphicCards = Arrays.asList(GraphicCard.values());
         graphicCards.sort((v1, v2) -> v2.toString().length() - v1.toString().length()); // To avoid GTX 1080 TI to be confused with GTX 1080
         for (GraphicCard graphicCard : GraphicCard.values()) {
@@ -73,16 +65,14 @@ public class GPUs {
     }
 
     // TODO: remove duplication
-    private String commandGetDescription() {
-        OS os = new OS();
-        OSType osType = os.getOsType();
-        if(osType == mac) {
+    private static String commandGetDescription(OSType osType) {
+        if(osType == OSType.MAC) {
             logger.error("TODO: implement");
             return null;
-        } else if(osType == linux) {
+        } else if(osType == OSType.LINUX) {
             logger.error("TODO: implement");
             return null;
-        } else if(osType == windows) {
+        } else if(osType == OSType.WINDOWS) {
             return "(Get-WmiObject Win32_VideoController).description"; // //TODO: Use maybe (Get-WmiObject Win32_VideoController) only and then regex for more efficiency
         } else {
             logger.info("Could not determine the os type");
@@ -90,16 +80,14 @@ public class GPUs {
         }
     }
 
-    private String commandGetAdapterRAM() {
-        OS os = new OS();
-        OSType osType = os.getOsType();
-        if(osType == mac) {
+    private static String commandGetAdapterRAM(OSType osType) {
+        if(osType == OSType.MAC) {
             logger.error("TODO: implement");
             return null;
-        } else if(osType == linux) {
+        } else if(osType == OSType.LINUX) {
             logger.error("TODO: implement");
             return null;
-        } else if(osType == windows) {
+        } else if(osType == OSType.WINDOWS) {
             return "(Get-WmiObject Win32_VideoController).AdapterRAM";
         } else {
             logger.info("Could not determine the os type");

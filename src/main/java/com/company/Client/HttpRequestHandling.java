@@ -1,9 +1,10 @@
 package com.company.Client;
 
-import com.company.MachineInformation.Configuration.ClientConfiguration;
-import com.company.MachineInformation.MachineConfigurationRetriever;
-import com.company.Miners.Configuration.MiningConfiguration;
-import com.company.Miners.MinedCurrencyShortName;
+import com.company.Client.JsonFormat.ClientJson.MiningConfiguration.MiningConfigurationRequestData;
+import com.company.Client.JsonFormat.ClientJson.MiningConfigurationRequest;
+import com.company.Client.JsonFormat.ClientJson.ReportMiningDiagnosis.ReportMiningDiagnosisRequestData;
+import com.company.Client.JsonFormat.ClientJson.ReportMiningDiagnosisRequest;
+import com.company.Client.JsonFormat.ServerJson.MiningConfigurationResponse;
 import com.google.gson.Gson;
 import org.apache.log4j.Logger;
 
@@ -21,24 +22,25 @@ public class HttpRequestHandling {
     final static Logger logger = Logger.getLogger(URLConnection.class);
     private final String requestAddress = "https://crypto-mining-optimisation.herokuapp.com/";
 
-    public MiningConfiguration getMiningConfiguration(ClientConfiguration clientConfiguration) {
+    public MiningConfigurationResponse getMiningConfiguration(MiningConfigurationRequestData miningConfigurationRequestData) {
         logger.info("Getting mining configurations");
 
         Gson g = new Gson();
-        String jsonClientConfig = g.toJson(clientConfiguration);
-
         // TODO: remove hardcoding
-        jsonClientConfig = "{\"userEmail\":\"" + HARDCODED_EMAIL +"\", \"workerName\": \"" + getWorkerName() + "\", \"data\":{\"systemConfig\":" + jsonClientConfig + ", \"benchMarking\":[]}}";
-        String response = postRequest(requestAddress, jsonClientConfig, "POST");
+        String request = g.toJson(MiningConfigurationRequest.builder().userEmail(HARDCODED_EMAIL).workerName(getWorkerName()).data(miningConfigurationRequestData).build());
+        String response = postRequest(requestAddress, request, "POST");
 
         logger.info("Obtained the following mining configuration: " + response);
-        return g.fromJson(response, MiningConfiguration.class);
+        return g.fromJson(response, MiningConfigurationResponse.class);
     }
 
     // TODO: set recurring work on the server to delete the workers records in the database which are no longer valid (give them a timestamp)
-    public void reportMiningDiagnosis(MinedCurrencyShortName currency, float hashRate) {
-        logger.info("Sending a report of mining diagnosis with currency " + currency + " and hashrate of " + hashRate + " H/s");
-        String request = "{\"userEmail\":\"" + HARDCODED_EMAIL +"\", \"workerName\": \"" + getWorkerName() + "\",\"currency\":\"" + currency + "\", \"hashrate\":\"" + hashRate + "\"}";
+    public void reportMiningDiagnosis(ReportMiningDiagnosisRequestData reportMiningDiagnosisRequestData) {
+        logger.info("Sending a report of mining diagnosis with currency " + reportMiningDiagnosisRequestData.getCurrency() + " and hashrate of " + reportMiningDiagnosisRequestData.getHashRate() + " H/s");
+
+        Gson g = new Gson();
+        String request = g.toJson(ReportMiningDiagnosisRequest.builder().userEmail(HARDCODED_EMAIL).workerName(getWorkerName()).data(reportMiningDiagnosisRequestData).build());
+        System.out.println(request);
         postRequest(requestAddress, request, "PUT");
     }
 

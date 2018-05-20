@@ -1,8 +1,8 @@
 package com.company.Miners.MiningAlgorithm.GpuMining.EthashCurrencies;
 
+import com.company.Client.JsonFormat.ClientJson.MiningConfiguration.ClientConfiguration.ClientConfiguration;
 import com.company.CommandsExecutor.CommandExecutor;
 import com.company.CommandsExecutor.CommandOutputMonitoring.CommandOutputMonitor;
-import com.company.MachineInformation.Configuration.ClientConfiguration;
 import com.company.Miners.KeyManager;
 import com.company.Miners.Miner;
 import com.google.common.collect.ImmutableList;
@@ -134,7 +134,7 @@ public abstract class Ethash extends Miner {
 
     @Override
     protected CommandOutputMonitor getOutputMonitoring() {
-        return new EthMinerOutputMonitor(minedCurrencyShortName);
+        return new EthMinerOutputMonitor(minedCurrencyShortName, gpu);
     }
 
     @Override
@@ -160,6 +160,6 @@ public abstract class Ethash extends Miner {
 
     @Override
     public boolean canMineOnMachine(ClientConfiguration clientConfiguration) {
-        return clientConfiguration.getGpus().getGpus().stream().anyMatch(gpu -> gpu.getMemorySize() >= necessaryDagSize);
+        return clientConfiguration.getGpus().stream().anyMatch(gpu -> gpu.getMemorySize() >= necessaryDagSize);
     }
 }

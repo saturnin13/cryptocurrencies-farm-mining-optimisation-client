@@ -1,9 +1,11 @@
 package com.company.Miners;
 
+import com.company.Client.JsonFormat.ClientJson.MiningConfiguration.ClientConfiguration.ClientConfiguration;
+import com.company.Client.JsonFormat.ClientJson.MiningConfiguration.ClientConfiguration.OS.OSType;
+import com.company.Client.JsonFormat.General.GPU.GPU;
+import com.company.Client.JsonFormat.General.MinedCurrencyShortName;
 import com.company.CommandsExecutor.CommandExecutor;
 import com.company.CommandsExecutor.CommandOutputMonitoring.CommandOutputMonitor;
-import com.company.MachineInformation.Configuration.ClientConfiguration;
-import com.company.MachineInformation.Configuration.OS.OSType;
 import com.google.common.collect.ImmutableList;
 import org.apache.log4j.Logger;
 
@@ -12,7 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.company.MachineInformation.Configuration.OS.OSType.*;
+import static com.company.Client.JsonFormat.ClientJson.MiningConfiguration.ClientConfiguration.OS.OSType.*;
 import static com.company.Variables.HOME_FOLDER;
 import static com.company.Variables.LOCATION_MAIN_FOLDER;
 
@@ -29,6 +31,7 @@ public abstract class Miner {
 
     protected MinedCurrencyShortName minedCurrencyShortName;
     protected String processName;
+    protected GPU gpu; // TODO use this in all the call
     protected List<String> downloadLinksWindows;
     protected List<String> downloadLinksLinux;
     protected List<String> downloadLinksMac;
@@ -39,14 +42,15 @@ public abstract class Miner {
     /**************************************************** MINING ***************************************************/
     /***************************************************************************************************************/
 
-    public void startMining(OSType currentOsType, Protocol protocol) {
+    public void startMining(OSType currentOsType, Protocol protocol, GPU gpu) {
         logger.info("Starting to mine " + minedCurrencyShortName + " miner");
+        this.gpu = gpu;
         this.protocol = protocol;
-        if(currentOsType == mac) {
+        if(currentOsType == MAC) {
             miningThread = getMiningThreadMac();
-        } else if(currentOsType == linux) {
+        } else if(currentOsType == LINUX) {
             miningThread = getMiningThreadLinux();
-        } else if(currentOsType == windows) {
+        } else if(currentOsType == WINDOWS) {
             miningThread = getMiningThreadWindows();
         } else {
             logger.info("Could not determine the os type for starting to mine: " + minedCurrencyShortName);
@@ -109,7 +113,7 @@ public abstract class Miner {
 
     private CommandExecutor getMiningThreadLinux() {
         miningSetUpActionsLinux();
-        // TODO: check that bash works on linux
+        // TODO: check that bash works on LINUX
         return CommandExecutor.builder()
                 .commands(getMiningCommandsLinux())
                 .cleanUpCommands(getMiningCleanUpCommandsLinux())
@@ -177,7 +181,7 @@ public abstract class Miner {
 
     private List<String> getMiningCleanUpCommandsMac() {
         return new ImmutableList.Builder<String>()
-                //TODO: test this line on mac
+                //TODO: test this line on MAC
                 .add("pkill -f " + processName)
                 .build();
     }
@@ -188,11 +192,11 @@ public abstract class Miner {
 
     public boolean install(OSType currentOsType) {
         logger.info("installing " + minedCurrencyShortName + " miner: " + processName);
-        if(currentOsType == mac) {
+        if(currentOsType == MAC) {
             installMac();
-        } else if(currentOsType == linux) {
+        } else if(currentOsType == LINUX) {
             installLinux();
-        } else if(currentOsType == windows) {
+        } else if(currentOsType == WINDOWS) {
             installWindows();
         } else {
             logger.info("Could not determine the os type for installation: " + minedCurrencyShortName);
@@ -253,7 +257,7 @@ public abstract class Miner {
     /***************************************************************************************************************/
 
     private void installLinux() {
-        // TODO: check that bash works on linux
+        // TODO: check that bash works on LINUX
         CommandExecutor commandExecutor = CommandExecutor.builder()
                 .commands(getInstallCommandsLinux())
                 .verbose(true)

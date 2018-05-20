@@ -1,11 +1,10 @@
 package com.company.CommandsExecutor.CommandOutputMonitoring;
 
 import com.company.Client.HttpRequestHandling;
-import com.company.Miners.MinedCurrencyShortName;
+import com.company.Client.JsonFormat.ClientJson.ReportMiningDiagnosis.ReportMiningDiagnosisRequestData;
+import com.company.Client.JsonFormat.General.GPU.GPU;
+import com.company.Client.JsonFormat.General.MinedCurrencyShortName;
 import com.company.Util.RegexPatternMatcher;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.company.Variables.*;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
@@ -13,10 +12,12 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 public abstract class MiningCommandOutputMonitor implements CommandOutputMonitor {
     protected long lastUpdateTime;
     protected MinedCurrencyShortName currencyShortName;
+    protected GPU gpu;
 
-    public MiningCommandOutputMonitor(MinedCurrencyShortName currencyShortName) {
+    public MiningCommandOutputMonitor(MinedCurrencyShortName currencyShortName, GPU gpu) {
         this.lastUpdateTime = 0;
         this.currencyShortName = currencyShortName;
+        this.gpu = gpu;
     }
 
     @Override
@@ -27,7 +28,12 @@ public abstract class MiningCommandOutputMonitor implements CommandOutputMonitor
         Float hashrate = getHashrate(line) != null ? getHashrate(line): getHashrate(previousLine);
         hashrate = hashrate == null ? 0: hashrate;
         HttpRequestHandling httpRequestHandling = new HttpRequestHandling();
-        httpRequestHandling.reportMiningDiagnosis(currencyShortName, hashrate);
+
+        httpRequestHandling.reportMiningDiagnosis(ReportMiningDiagnosisRequestData.builder()
+                .currency(currencyShortName)
+                .hashRate(hashrate)
+                .gpu(gpu)
+                .build());
         lastUpdateTime = System.currentTimeMillis();
     }
 
