@@ -14,7 +14,6 @@ public class MinersFactory {
 
     private static Miner ethereum = new Ethereum();
     private static Miner ethereumClassic = new EthereumClassic();
-    private static Miner bitcoin = new Bitcoin();
     private static Miner expanse = new Expanse();
     private static Miner musicCoin = new MusicCoin();
     private static Miner pirl = new Pirl();
@@ -31,7 +30,6 @@ public class MinersFactory {
         switch (currencyShortName) {
             case ETH  : return ethereum;
             case ETC  : return ethereumClassic;
-            case BTC  : return bitcoin;
             case EXP  : return expanse;
             case MUSIC: return musicCoin;
             case PIRL : return pirl;

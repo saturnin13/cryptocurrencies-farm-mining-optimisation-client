@@ -13,7 +13,6 @@ public class KeyManager {
         switch (currencyShortName) {
             case ETH  : return KEY_ETH;
             case ETC  : return KEY_ETC;
-            case BTC  : return KEY_BTC;
             case EXP  : return KEY_EXP;
             case MUSIC: return KEY_MUSIC;
             case PIRL : return KEY_PIRL;

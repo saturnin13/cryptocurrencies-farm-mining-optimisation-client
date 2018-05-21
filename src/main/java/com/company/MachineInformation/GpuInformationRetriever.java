@@ -50,6 +50,7 @@ public class GpuInformationRetriever {
             }
             currentGpu.setMemorySize(Long.parseLong(gpuMemorySize[i]));
             currentGpu.setGraphicCard(determineGraphicCard(gpuDescription[i]));
+            currentGpu.setGraphicCardName(gpuDescription[i]);
             currentGpu.setId(i);
             result.add(currentGpu);
         }

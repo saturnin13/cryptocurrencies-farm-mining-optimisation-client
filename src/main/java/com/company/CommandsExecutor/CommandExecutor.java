@@ -26,6 +26,7 @@ public class CommandExecutor extends Thread {
     private List<String> cleanUpCommands;
     private CommandOutputMonitor outputMonitor;
     private boolean verbose;
+    @Builder.Default private boolean doReadlines = true;
 
     @Override
     public void run() {
@@ -73,18 +74,24 @@ public class CommandExecutor extends Thread {
             BufferedReader stdInput = new BufferedReader(new
                     InputStreamReader(p.getInputStream()));
 
-            while ((line = stdInput.readLine()) != null) {
-                output.append(line).append("\n");
-                if(verbose) {
-                    logger.debug(line);
+            if(doReadlines) {
+                while ((line = stdInput.readLine()) != null) {
+                    output.append(line).append("\n");
+                    if(verbose) {
+                        logger.debug(line);
+                    }
+                    if(outputMonitor != null) {
+                        outputMonitor.monitorOutput(line, previousLine);
+                    }
+                    if(exit) {
+                        break;
+                    }
+                    previousLine = line;
                 }
-                if(outputMonitor != null) {
-                    outputMonitor.monitorOutput(line, previousLine);
+            } else {
+                while(!exit) {
+                    sleep(1000);
                 }
-                if(exit) {
-                    break;
-                }
-                previousLine = line;
             }
 
             p.getOutputStream().close();
@@ -95,6 +102,8 @@ public class CommandExecutor extends Thread {
             logger.error("IOException while executing a command");
             e.printStackTrace();
             System.exit(-1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         if(cleanUpCommands != null) {
@@ -102,6 +111,7 @@ public class CommandExecutor extends Thread {
             this.commands = cleanUpCommands;
             this.cleanUpCommands = null;
             this.verbose = false;
+            this.doReadlines = true;
             run();
         }
         return output.toString();

@@ -63,6 +63,7 @@ public abstract class Ethash extends Miner {
                 .commands(commands)
                 .cleanUpCommands(cleanUpCommands)
                 .verbose(true)
+                .doReadlines(false)
                 .build();
         proxyThread.start();
     }

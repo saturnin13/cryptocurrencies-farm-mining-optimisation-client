@@ -9,7 +9,6 @@ public class Variables {
 
     public static final String KEY_ETH = "0x722f9b9842510c1e54f0b067a65fa853418fd6a7";
     public static final String KEY_ETC = "0xfee06bbe5856218a2982b8f8d0f3dfd00fb77d50";
-    public static final String KEY_BTC = "1ASw5tYtmg5gMX5BCihGzLqpGSikUb9EYv";
     public static final String KEY_EXP = "0x256a517570cab39f42103e3d610d5cfc676a47b9";
     public static final String KEY_MUSIC = "0xafce4c193140ddfba901a0e65aa03c7c4a1cdaa1";
     public static final String KEY_PIRL = ""; // TODO: add exchange that can support it
